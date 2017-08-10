@@ -5,7 +5,7 @@
     <version>2.7.123</version>
     <title>Zebble.Inspector for Zebble for Xamarin</title>
     <description>Allows inspection of a running Zebble app on Windows during development.</description>
-    <iconUrl>https://raw.githubusercontent.com/{MyUserName}/{MyRepo}/.../Shared/Icon.png</iconUrl>
+    <iconUrl>https://raw.githubusercontent.com/Geeksltd/Zebble.Inspector/master/Icon.png</iconUrl>
     <projectUrl>https://github.com/Geeksltd/Zebble.Inspector</projectUrl>
     <authors>Mobile App Technologies Ltd</authors>
     <owners>Mobile App Technologies Ltd</owners> 

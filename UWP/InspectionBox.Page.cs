@@ -39,7 +39,7 @@
                 //Enable navigation to source for app's classes
                 if (item.Source is View view && view.GetType().GetAssembly() == UIRuntime.GetEntryAssembly())
                 {
-                    var icon = GetType().GetAssembly().ReadEmbeddedResource("Zebble.UWP.Inspection.Resources.VS.png");
+                    var icon = GetType().GetAssembly().ReadEmbeddedResource("Zebble.UWP.Resources.VS.png");
                     item.RightIcon.Opacity(0.2f).Size(15).On(x => x.Tapped, () => LoadInVisualStudio(view.GetType())).ImageData = icon;
                 }
             }
