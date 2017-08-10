@@ -8,7 +8,7 @@
         static DateTime LastDomUpdated;
         static DateTime LastTreeUpdated;
 
-        Inspector()
+        public Inspector()
         {
             Nav.Navigated.Handle(OnNavigated);
             Device.ThreadPool.RunOnNewThread(Watch);
