@@ -9,7 +9,7 @@
     },
     {
       "Analyzer": "UnusedMethodsAnalyzer",
-      "OccurrenceCount": 53,
+      "OccurrenceCount": 85,
       "Exceptions": null,
       "SentToServer": true,
       "InstallationName": "PAYMON"
