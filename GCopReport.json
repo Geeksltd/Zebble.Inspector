@@ -16,7 +16,28 @@
     },
     {
       "Analyzer": "MeaningfulNameForVariablesAnalyzer",
-      "OccurrenceCount": 44,
+      "OccurrenceCount": 45,
+      "Exceptions": null,
+      "SentToServer": true,
+      "InstallationName": "PAYMON"
+    },
+    {
+      "Analyzer": "AsyncAwaitMethodAnalyzer",
+      "OccurrenceCount": 76,
+      "Exceptions": null,
+      "SentToServer": true,
+      "InstallationName": "PAYMON"
+    },
+    {
+      "Analyzer": "LongMethodAnalyzer",
+      "OccurrenceCount": 2,
+      "Exceptions": null,
+      "SentToServer": true,
+      "InstallationName": "PAYMON"
+    },
+    {
+      "Analyzer": "ObjectInitializerAnalyzer",
+      "OccurrenceCount": 1,
       "Exceptions": null,
       "SentToServer": true,
       "InstallationName": "PAYMON"
