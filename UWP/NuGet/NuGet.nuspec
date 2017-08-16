@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
   <metadata>
     <id>Zebble.Inspector</id>
-    <version>2.7.130</version>
+    <version>2.7.132</version>
     <title>Inspector for Zebble (Xamarin)</title>
     <description>Allows inspection of a running Zebble app on Windows during development.</description>
     <iconUrl>https://raw.githubusercontent.com/Geeksltd/Zebble.Inspector/master/Icon.png</iconUrl>
@@ -10,6 +10,9 @@
     <authors>Mobile App Technologies Ltd</authors>
     <owners>Mobile App Technologies Ltd</owners>
     <copyright>Copyright ©2017 | Mobile App Technologies Ltd</copyright>
+    <dependencies>
+      <dependency id="Zebble.CheckBox" version="1.22.109" />
+    </dependencies>
   </metadata>
   <files>
     <file src="..\..\lib\Zebble.Inspector.UWP.*" target="lib\UAP10\" />
