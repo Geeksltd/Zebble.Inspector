@@ -24,7 +24,7 @@
                 if (property.GetGetMethod()?.IsPublic != true) continue;
 
                 var type = property.PropertyType;
-                if (type.IsA<Type>() || type.IsA<View>() || type.IsA<Action>() || type.IsA<IBoxShadow>()) continue;
+                if (type.IsA<Type>() || type.IsA<View>() || type.IsA<Action>()) continue;
 
                 if (property.Name == nameof(View.AutoFlash)) continue;
 
