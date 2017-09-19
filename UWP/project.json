@@ -1,10 +1,11 @@
 ﻿{
   "dependencies": {
     "Microsoft.NETCore.UniversalWindowsPlatform": "5.2.3",
+    "Zebble": "4.2.354",
     "Zebble.CheckBox": "1.22.109"
   },
   "frameworks": {
-    "uap10.0": {}
+    "uap10.0.10240": {}
   },
   "runtimes": {
     "win10-arm": {},
@@ -15,7 +16,3 @@
     "win10-x64-aot": {}
   }
 }
-
-
-
-

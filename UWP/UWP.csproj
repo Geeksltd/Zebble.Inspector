@@ -26,6 +26,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>..\lib\Zebble.Inspector.UWP.xml</DocumentationFile>
+    <NoWarn>1591</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -107,12 +108,6 @@
     <None Include="NuGet\CreatePackage.bat" />
     <None Include="NuGet\NuGet.nuspec" />
     <None Include="project.json" />
-  </ItemGroup>
-  <ItemGroup>
-    <Reference Include="Zebble.UWP">
-      <HintPath>..\..\..\Zebble\lib\Zebble.UWP.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DevicePanel.cs" />

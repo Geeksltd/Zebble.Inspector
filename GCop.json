@@ -46,6 +46,10 @@
     "AnalyzerPerformanceInterval": 30,
     "ProjectInfoInterval": 30
   },
+  "Diagnostics": {
+    "Enabled": false,
+    "URL": null
+  },
   "Logging": {
     "LogExceptionsToFile": false,
     "LogExceptionsToOutputWindow": false
