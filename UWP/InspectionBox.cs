@@ -144,7 +144,7 @@ namespace Zebble.UWP
                 CreateButton("Back.png")
                 .On(x => x.Tapped, Nav.OnHardwareBack),
                 CreateButton("Shake.png")
-                .On(x => x.Tapped, () => Device.Accelerometer.DeviceShaken.RaiseOn(Device.ThreadPool)),
+                .On(x => x.Tapped, () => Device.Accelerometer.DeviceShaken.RaiseOn(Thread.Pool)),
                 CreateButton("Rotation.png")
                 .On(x => x.Tapped, async () =>
                 {
@@ -159,7 +159,7 @@ namespace Zebble.UWP
                     await Inspector.Current.Resize();
                 }),
                 CreateButton("Warning.png").On(x=>x.Tapped,()=>
-                    Device.UIThread.Run(()=> Device.App.RaiseReceivedMemoryWarning())),
+                    Thread.UI.Run(()=> Device.App.RaiseReceivedMemoryWarning())),
                 new TextView().Width(8).Height(100.Percent()).Border(color:"#777", left:1),
                 geoLocationButton
     });

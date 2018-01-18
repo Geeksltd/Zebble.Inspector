@@ -31,7 +31,7 @@
 
             await AddProperties();
 
-            Device.UIThread.RunAction(() =>
+            Thread.UI.RunAction(() =>
            (CssTextbox.Native() as Windows.UI.Xaml.Controls.Border)
                .Get(x => x?.Child as Windows.UI.Xaml.Controls.TextBox)
                .Perform(x => x.IsReadOnly = true));

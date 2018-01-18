@@ -3,7 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Threading.Tasks;
-    using Zebble.NativeImpl;
+    using Zebble.Device;
 
     class DevicePanel : Stack
     {

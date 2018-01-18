@@ -11,7 +11,7 @@
         public Inspector()
         {
             Nav.Navigated.Handle(OnNavigated);
-            Device.ThreadPool.RunOnNewThread(Watch);
+            Thread.Pool.RunOnNewThread(Watch);
         }
 
         public Task DomUpdated(View view)

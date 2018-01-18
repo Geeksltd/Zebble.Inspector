@@ -1,8 +1,8 @@
 ﻿{
   "dependencies": {
-    "Microsoft.NETCore.UniversalWindowsPlatform": "6.0.5",
-    "Zebble": "4.2.373",
-    "Zebble.CheckBox": "1.22.109"
+    "Microsoft.NETCore.UniversalWindowsPlatform": "6.0.6",
+    "Zebble": "4.3.100",
+    "Zebble.CheckBox": "1.22.110"
   },
   "frameworks": {
     "uap10.0.10240": {}

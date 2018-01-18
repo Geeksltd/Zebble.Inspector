@@ -70,7 +70,7 @@
             var source = new TaskCompletionSource<bool>();
             var done = false;
 
-            Device.UIThread.Post(async () =>
+            Thread.UI.Post(async () =>
            {
                var appView = ApplicationView.GetForCurrentView();
 

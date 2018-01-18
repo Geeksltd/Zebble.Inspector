@@ -17,7 +17,7 @@ namespace Zebble.UWP
             await UIRuntime.RenderRoot.Add(HighlightMask, awaitNative: true);
             await UIRuntime.RenderRoot.Add(HighlightBorder, awaitNative: true);
 
-            Device.UIThread.RunAction(() =>
+            Thread.UI.RunAction(() =>
             {
                 HighlightMask.Native().IsHitTestVisible = false;
                 HighlightBorder.Native().IsHitTestVisible = false;
@@ -48,6 +48,6 @@ namespace Zebble.UWP
             }
         }
 
-         void HideHighlighters() => new[] { HighlightBorder, HighlightMask }.ExceptNull().Do(x => x.Hide());
+        void HideHighlighters() => new[] { HighlightBorder, HighlightMask }.ExceptNull().Do(x => x.Hide());
     }
 }
