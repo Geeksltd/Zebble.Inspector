@@ -1,4 +1,4 @@
-[logo]: https://raw.githubusercontent.com/Geeksltd/Zebble.Inspector/master/Shared/NuGet/Icon.png "Zebble.Inspector"
+[logo]: https://raw.githubusercontent.com/Geeksltd/Zebble.Inspector/master/Icon.png "Zebble.Inspector"
 
 
 ## Zebble.Inspector
