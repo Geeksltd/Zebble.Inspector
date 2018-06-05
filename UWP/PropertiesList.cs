@@ -20,7 +20,14 @@
         public PropertiesList(View view)
         {
             View = view;
-            Shown.Handle(OnShown);
+
+            // Shown.Handle(OnShown);
+        }
+
+        public override async Task OnInitializing()
+        {
+            await base.OnInitializing();
+            await OnShown();
         }
 
         async Task OnShown()
@@ -36,7 +43,8 @@
                .Get(x => x?.Child as Windows.UI.Xaml.Controls.TextBox)
                .Perform(x => x.IsReadOnly = true));
 
-            await Add(Error = new TextView().Wrap().TextColor(Colors.Red).Padding(10).Ignored().Margin(10)
+            await Add(Error = new TextView().Wrap().TextColor(Colors.Red)
+                .Padding(10).Ignored().Margin(10)
                 .Background(color: Colors.LightYellow));
 
             await Add(CreateDeleteButton());
