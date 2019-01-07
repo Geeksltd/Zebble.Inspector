@@ -21,16 +21,16 @@
         {
             View = view;
 
-            // Shown.Handle(OnShown);
+            // Shown.Handle(CreateComponents);
         }
 
         public override async Task OnInitializing()
         {
             await base.OnInitializing();
-            await OnShown();
+            await CreateComponents();
         }
 
-        async Task OnShown()
+        async Task CreateComponents()
         {
             await AddCss();
 

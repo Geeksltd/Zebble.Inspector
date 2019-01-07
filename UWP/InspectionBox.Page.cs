@@ -14,8 +14,11 @@
             if (Inspector.Current.CurrentView != null)
             {
                 await PropertiesScroller.ClearChildren();
-                var scrollerList = await PropertiesScroller.Add(new PropertiesList(Inspector.Current.CurrentView));
-                scrollerList.ScrollEnabledChange.Handle(x => PropertiesScroller.EnableScrolling = x);
+
+                var propertiesBox = new PropertiesList(Inspector.Current.CurrentView);
+
+                await Thread.UI.Run(() => PropertiesScroller.Add(propertiesBox));
+                propertiesBox.ScrollEnabledChange.Handle(x => PropertiesScroller.EnableScrolling = x);
             }
         }
 
@@ -74,6 +77,7 @@
                 if (node.Source is View nodeView && path.Contains(nodeView)) await node.Expand();
 
             await HighlightSelectedNode();
+
             await LoadProperties();
         }
 

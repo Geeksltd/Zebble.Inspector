@@ -44,23 +44,23 @@
 
             var acc = new MotionVector
             {
-                X = Phone.RotationX / 360,
-                Y = Phone.RotationY / 360,
-                Z = Phone.Rotation / 360,
+                X = Phone.RotationX?.Angel ?? 0 / 360,
+                Y = Phone.RotationY?.Angel ?? 0 / 360,
+                Z = Phone.Rotation?.Angel ?? 0 / 360,
             };
 
             // TODO: For gyro, this should be the speed, not present value.
             // We should find a time-based approach to find the correct values.
             var gyro = new MotionVector
             {
-                X = Phone.RotationX / 360,
-                Y = Phone.RotationY / 360,
-                Z = Phone.Rotation / 360,
+                X = Phone.RotationX?.Angel ?? 0 / 360,
+                Y = Phone.RotationY?.Angel ?? 0 / 360,
+                Z = Phone.Rotation?.Angel ?? 0 / 360,
             };
 
             AccelerometerInfo.Text($"Accelorometer       X: {acc.X.Round(2)}      Y: {acc.Y.Round(2)}       Z: {acc.Z.Round(2)}");
             GyroscopeInfo.Text($"Gyroscope             X: {gyro.X.Round(2)}      Y: {gyro.Y.Round(2)}       Z: {gyro.Z.Round(2)}");
-            CompassInfo.Text($"Compass                Heading: {Phone.Rotation.Round(2)}");
+            CompassInfo.Text($"Compass                Heading: {acc.Z.Round(2)}");
         }
 
         async Task OnShown()

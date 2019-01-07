@@ -1,10 +1,10 @@
 namespace Zebble.UWP
 {
+    using Services;
     using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
-    using Services;
 
     partial class InspectionBox : Stack
     {
@@ -141,25 +141,10 @@ namespace Zebble.UWP
             });
 
             DeviceTabs.AddRange(new List<View> {
-                CreateButton("Back.png")
-                .On(x => x.Tapped, Nav.OnHardwareBack),
-                CreateButton("Shake.png")
-                .On(x => x.Tapped, () => Device.Accelerometer.DeviceShaken.RaiseOn(Thread.Pool)),
-                CreateButton("Rotation.png")
-                .On(x => x.Tapped, async () =>
-                {
-                   Inspector.Current.IsRotating = true;
-
-                    var oldWidth = Device.Screen.Width;
-                    var oldHeight = Device.Screen.Height;
-
-                    await Device.Screen.ConfigureSize(() => oldHeight, () => oldWidth);
-                    Inspector.Current.IsRotating  = false;
-
-                    await Inspector.Current.Resize();
-                }),
-                CreateButton("Warning.png").On(x=>x.Tapped,()=>
-                    Thread.UI.Run(()=> Device.App.RaiseReceivedMemoryWarning())),
+                CreateButton("Back.png").On(x => x.Tapped, Nav.OnHardwareBack),
+                CreateShakeButton(),
+                CreateRotationButton(),
+                CreateMemoryWarningButton(),
                 new TextView().Width(8).Height(100.Percent()).Border(color:"#777", left:1),
                 geoLocationButton
     });
@@ -174,6 +159,37 @@ namespace Zebble.UWP
             CloseButton.X(570);
 
             DeviceTabs.ForEach(view => { view.Visible = false; });
+        }
+
+        View CreateShakeButton()
+        {
+            return CreateButton("Shake.png")
+                  .On(x => x.Tapped, () => Device.Accelerometer.DeviceShaken.RaiseOn(Thread.Pool));
+        }
+
+        View CreateRotationButton()
+        {
+            return CreateButton("Rotation.png")
+                 .On(x => x.Tapped, async () =>
+                 {
+                     Inspector.Current.IsRotating = true;
+
+                     var oldWidth = Device.Screen.Width;
+                     var oldHeight = Device.Screen.Height;
+
+                     await Device.Screen.ConfigureSize(() => oldHeight, () => oldWidth);
+                     Inspector.Current.IsRotating = false;
+
+                     await Inspector.Current.Resize();
+                 });
+        }
+
+        View CreateMemoryWarningButton()
+        {
+            var result = CreateButton("Warning.png");
+            //result.On(x => x.Tapped, () => Thread.UI.Run(() => Device.App.ReceivedMemoryWarning?.invo()));
+            result.On(x => x.Tapped, () => Device.Log.Error("Fix CreateMemoryWarningButton()!"));
+            return result;
         }
 
         View CreateButton(string name)

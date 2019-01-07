@@ -32,7 +32,7 @@
             {
                 var moment = DateTime.UtcNow;
 
-                await Task.Delay(100);
+                await Task.Delay(500);
 
                 if (LastDomUpdated > moment) continue;
                 if (LastTreeUpdated > LastDomUpdated) continue;
