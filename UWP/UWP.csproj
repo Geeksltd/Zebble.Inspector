@@ -152,7 +152,7 @@
       <Version>4.3.2</Version>
     </PackageReference>
     <PackageReference Include="Zebble">
-      <Version>4.4.164</Version>
+      <Version>4.4.185</Version>
     </PackageReference>
     <PackageReference Include="Zebble.CheckBox">
       <Version>1.22.111</Version>
