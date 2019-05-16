@@ -117,8 +117,10 @@
 
                     if (item.Notes.HasValue())
                     {
-                        await field.Add(new TextView("?").Background(Colors.Gray).Size(15).TextAlignment(Alignment.Middle).Round().On(x => x.Tapped,
-                            () => Alert.Show(item.Notes)));
+                        await field.Add(new TextView("?")
+                            .Background(Colors.Gray).Size(15).TextAlignment(Alignment.Middle)
+                            .Round().On(x => x.Tapped,
+                            () => { Zebble.Device.Log.Warning(item.Notes); return Task.CompletedTask; }));
                     }
 
                     if (item.Instance is ITrackable tra) await field.Add(GetTrackerIcon(tra));
@@ -137,7 +139,8 @@
                                  .TextAlignment(Alignment.Middle).Round().On(x => x.Tapped,
                                 () =>
                                 {
-                                    LayoutTracker.StartTracking(trackables); Nav.Reload().RunInParallel();
+                                    LayoutTracker.StartTracking(trackables);
+                                    Nav.Reload().RunInParallel();
                                 });
         }
 

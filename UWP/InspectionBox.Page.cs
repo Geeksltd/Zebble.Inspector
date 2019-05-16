@@ -17,7 +17,8 @@
 
                 var propertiesBox = new PropertiesList(Inspector.Current.CurrentView);
 
-                await Thread.UI.Run(() => PropertiesScroller.Add(propertiesBox));
+                await Thread.UI.Run(() => UIWorkBatch.Run(() => PropertiesScroller.Add(propertiesBox)));
+
                 propertiesBox.ScrollEnabledChange.Handle(x => PropertiesScroller.EnableScrolling = x);
             }
         }
@@ -32,12 +33,14 @@
             Tree = await TreeScroller.Add(new TreeView());
 
             foreach (var item in Root.AllChildren)
+            {
                 await Tree.AddNode(new TreeView.Node(item)); // Recursively creates child nodes
+            }
 
             foreach (var item in Tree.AllNodes)
             {
                 // Enable tap on the items:
-                item.Tapped.Handle(p => UIWorkBatch.Run(() => Inspector.Current.Load(item.Source as View)));
+                item.Tapped.Handle(p => Inspector.Current.Load(item.Source as View));
 
                 //Enable navigation to source for app's classes
                 if (item.Source is View view && view.GetType().GetAssembly() == UIRuntime.GetEntryAssembly())
@@ -73,12 +76,12 @@
             var path = currentView.WithAllParents().ToList();
 
             // Expand the path to the currently selected item:
-            foreach (var node in Tree.AllNodes)
+            foreach (var node in Tree.AllNodes.ExceptNull().ToArray())
                 if (node.Source is View nodeView && path.Contains(nodeView)) await node.Expand();
 
             await HighlightSelectedNode();
 
-            await LoadProperties();
+            Thread.Pool.RunOnNewThread(LoadProperties);
         }
 
         async Task HighlightSelectedNode()

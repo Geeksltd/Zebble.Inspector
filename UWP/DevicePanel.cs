@@ -44,18 +44,18 @@
 
             var acc = new MotionVector
             {
-                X = Phone.RotationX?.Angel ?? 0 / 360,
-                Y = Phone.RotationY?.Angel ?? 0 / 360,
-                Z = Phone.Rotation?.Angel ?? 0 / 360,
+                X = Phone.RotationX?.Angle ?? 0 / 360,
+                Y = Phone.RotationY?.Angle ?? 0 / 360,
+                Z = Phone.Rotation?.Angle ?? 0 / 360,
             };
 
             // TODO: For gyro, this should be the speed, not present value.
             // We should find a time-based approach to find the correct values.
             var gyro = new MotionVector
             {
-                X = Phone.RotationX?.Angel ?? 0 / 360,
-                Y = Phone.RotationY?.Angel ?? 0 / 360,
-                Z = Phone.Rotation?.Angel ?? 0 / 360,
+                X = Phone.RotationX?.Angle ?? 0 / 360,
+                Y = Phone.RotationY?.Angle ?? 0 / 360,
+                Z = Phone.Rotation?.Angle ?? 0 / 360,
             };
 
             AccelerometerInfo.Text($"Accelorometer       X: {acc.X.Round(2)}      Y: {acc.Y.Round(2)}       Z: {acc.Z.Round(2)}");

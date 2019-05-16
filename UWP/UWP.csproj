@@ -107,7 +107,9 @@
   <ItemGroup>
     <!-- A reference to the entire .Net Framework and Windows SDK are automatically included -->
     <None Include="NuGet\CreatePackage.bat" />
-    <None Include="NuGet\NuGet.nuspec" />
+    <None Include="NuGet\NuGet.nuspec">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DevicePanel.cs" />
@@ -146,20 +148,23 @@
       <Version>4.3.2</Version>
     </PackageReference>
     <PackageReference Include="Zebble">
-      <Version>4.4.137</Version>
+      <Version>4.4.239</Version>
     </PackageReference>
     <PackageReference Include="Zebble.CheckBox">
-      <Version>1.22.111</Version>
+      <Version>1.22.115</Version>
     </PackageReference>
     <PackageReference Include="Zebble.Location">
-      <Version>1.0.107</Version>
+      <Version>1.0.110</Version>
     </PackageReference>
     <PackageReference Include="Zebble.Sensors">
-      <Version>1.1.101</Version>
+      <Version>1.1.104</Version>
     </PackageReference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
   </PropertyGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\WindowsXaml\v$(VisualStudioVersion)\Microsoft.Windows.UI.Xaml.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>copy /y $(TargetDir)*.* C:\Users\Administrator\.nuget\packages\zebble.inspector\2.7.140\runtimes\win10-x86\lib\uap10.0</PostBuildEvent>
+  </PropertyGroup>
 </Project>
