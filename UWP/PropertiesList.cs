@@ -39,6 +39,13 @@
             await EnsureProperties();
         }
 
+        public async Task Reset()
+        {
+            CssTextbox.Text = TypeInfo.Text = "";
+            CurrentSettings = new Inspector.PropertySettings[0];
+            await EnsureProperties();
+        }
+
         public override async Task OnInitializing()
         {
             await base.OnInitializing();
@@ -113,10 +120,7 @@
                    await AddOrReviveGroup(group.Key);
 
                    foreach (var item in group)
-                   {
                        await AddOrReviveField(item);
-                       Zebble.Device.Log.Message("Added: " + item.Key + "|" + item.Property.DeclaringType + "." + item.Property.Name);
-                   }
                }
 
                foreach (var view in GroupViews.Where(x => ShouldIgnore(x.Key)))

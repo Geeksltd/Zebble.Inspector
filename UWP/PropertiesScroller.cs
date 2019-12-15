@@ -23,5 +23,7 @@ namespace Zebble.UWP
             if (Inspector.Current.CurrentView == null) return;
             await PropertiesBox.Load(Inspector.Current.CurrentView);
         }
+
+        internal Task Reset() => PropertiesBox.Reset();
     }
 }

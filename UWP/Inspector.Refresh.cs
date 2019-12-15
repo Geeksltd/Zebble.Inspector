@@ -53,7 +53,7 @@
                 HideHighlighters();
 
                 CurrentView = null;
-                await (InspectionBox.PropertiesScroller?.ClearChildren()).OrCompleted();
+                await (InspectionBox.PropertiesScroller?.Reset()).OrCompleted();
             }
             catch (Exception ex)
             {
