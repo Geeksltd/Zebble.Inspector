@@ -1,7 +1,7 @@
 ﻿namespace Zebble.UWP
 {
-    using System;
     using Services;
+    using System;
 
     [EscapeGCop("Hardcoded values are fine here.")]
     partial class Inspector

@@ -112,7 +112,6 @@
                 latField.Control.Background(color: "#444").Padding(top: 5).Font(color: Colors.White, size: 10);
                 longField.Control.Background(color: "#444").Padding(top: 5).Font(color: Colors.White, size: 10);
 
-
                 if (EnvironmentSimulator.Location != null)
                 {
                     latField.Control.Text(EnvironmentSimulator.Location.Latitude.ToString());

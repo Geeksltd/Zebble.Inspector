@@ -6,8 +6,7 @@ namespace Zebble.UWP
 {
     partial class Inspector
     {
-        static Canvas HighlightMask;
-        static Canvas HighlightBorder;
+        static Canvas HighlightMask, HighlightBorder;
 
         static async Task CreateHighlightMask()
         {

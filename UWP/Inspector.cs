@@ -44,6 +44,7 @@
 
                     await HighlightItem();
                     await InspectionBox.SelectCurrentNode();
+                    await InspectionBox.PropertiesScroller.Load();
                 }
             }
             catch (Exception ex)
@@ -61,8 +62,8 @@
 
         internal async Task Resize()
         {
+            await InspectionBox.IgnoredAsync(false);
             await ResizeWindow(View.Root.ActualWidth + InspectionBox.WIDTH);
-            InspectionBox.Style.Ignored = false;
         }
 
         static Task ResizeWindow(double width)
@@ -73,7 +74,6 @@
             Thread.UI.Post(async () =>
            {
                var appView = ApplicationView.GetForCurrentView();
-
                var newSize = new Size((float)width, (float)appView.VisibleBounds.Height);
 
                Windows.Foundation.TypedEventHandler<ApplicationView, object> changed = null;
@@ -86,7 +86,6 @@
                };
 
                appView.VisibleBoundsChanged += changed;
-
                appView.TryResizeView(new Windows.Foundation.Size(newSize.Width, newSize.Height));
 
                await Task.Delay(2.Seconds());
@@ -103,7 +102,7 @@
             LastDomUpdated = DateTime.MinValue;
             LastTreeUpdated = DateTime.MinValue;
 
-            InspectionBox.Style.Ignored = true;
+            await InspectionBox.IgnoredAsync();
             new[] { HighlightBorder, HighlightMask }.Do(x => x.Hide());
             await ResizeWindow(Device.Screen.Width);
         }

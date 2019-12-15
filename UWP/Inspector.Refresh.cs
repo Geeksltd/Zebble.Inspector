@@ -5,8 +5,7 @@
 
     partial class Inspector : IInspector
     {
-        static DateTime LastDomUpdated;
-        static DateTime LastTreeUpdated;
+        static DateTime LastDomUpdated, LastTreeUpdated;
 
         public Inspector()
         {
@@ -40,6 +39,8 @@
 
                 LastTreeUpdated = DateTime.UtcNow;
                 await InspectionBox.CreateTreeView();
+                await InspectionBox.SelectCurrentNode();
+                await InspectionBox.PropertiesScroller.Load();
             }
         }
 

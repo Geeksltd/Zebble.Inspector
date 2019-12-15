@@ -1,27 +1,42 @@
 ﻿namespace Zebble.UWP
 {
     using System;
+    using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
     using Windows.System;
-    using Zebble.Services;
 
     class PropertiesList : Stack
     {
+        Inspector.PropertySettings[] CurrentSettings;
+
+        string CurrentCss;
         View View;
-        TextInput CssTextbox;
-        TextView Error;
-        TextInput AttributeFilter;
-        Stack PropertiesContainer;
-        DateTime LastFilterChanged;
+        string[] SearchKeywords;
+        TextInput CssTextbox = new TextInput { Lines = 3 }.Background(color: "#333").Padding(5).Font(11, color: "#7da").Border(0);
+        TextView TypeInfo = new TextView().TextColor("#888").Background("#333").Padding(5).Margin(bottom: 5);
+        TextInput AttributeFilter = new TextInput { Placeholder = "Search..." };
+        Stack PropertiesContainer = new Stack();
+        Dictionary<string, TextView> GroupViews = new Dictionary<string, TextView>();
+        Dictionary<string, PropertyFormField> Fields = new Dictionary<string, PropertyFormField>();
 
         internal AsyncEvent<bool> ScrollEnabledChange = new AsyncEvent<bool>();
 
-        public PropertiesList(View view)
+        public async Task Load(View view)
         {
             View = view;
 
-            // Shown.Handle(CreateComponents);
+            CurrentCss = CurrentCss = view.CurrentlyAppliedCss;
+            CssTextbox.Text = CurrentCss;
+            CssTextbox.Height.Update();
+            TypeInfo.Text = "Type ➝ " + view.GetType().WithAllParents()
+              .TakeWhile(x => x != typeof(View))
+              .Select(x => x.GetProgrammingName(useGlobal: false, useNamespace: false, useNamespaceForParams: false))
+              .ToString("\r\n➤ ");
+
+            CurrentSettings = Inspector.GetSettings(View).ToArray();
+
+            await EnsureProperties();
         }
 
         public override async Task OnInitializing()
@@ -33,118 +48,134 @@
         async Task CreateComponents()
         {
             await AddCss();
-
             await AddAttributeFilter();
-
-            await AddProperties();
+            await Add(PropertiesContainer);
 
             Thread.UI.RunAction(() =>
            (CssTextbox.Native() as Windows.UI.Xaml.Controls.Border)
                .Get(x => x?.Child as Windows.UI.Xaml.Controls.TextBox)
                .Perform(x => x.IsReadOnly = true));
 
-            await Add(Error = new TextView().Wrap().TextColor(Colors.Red)
-                .Padding(10).Ignored().Margin(10)
-                .Background(color: Colors.LightYellow));
-
             await Add(CreateDeleteButton());
             await Add(CreateBringToFrontButton());
             await Add(CreateSendToBackButton());
-            await Add(CreateTypeInfo());
+            await Add(TypeInfo);
         }
 
         async Task AddAttributeFilter()
         {
-            AttributeFilter = new TextInput { Placeholder = "Search..." }
-            .ChangeInBatch(x => x.Margin(top: 10).Padding(5).Border(0).Background(color: "#333").Font(12, color: "#aaa"))
-                .On(x => x.UserTextChanged, FilterAttributes);
+            AttributeFilter.Margin(top: 10).Padding(5).Border(0).Background(color: "#333").Font(12, color: "#aaa")
+                   .On(x => x.UserTextChanged, FilterAttributes);
 
             await Add(AttributeFilter);
         }
 
         async Task AddCss()
         {
-            var code = View.CurrentlyAppliedCss;
-
             await Add(new TextView("Applicable CSS Rules").ChangeInBatch(x => x.Font(20).Margin(vertical: 10)));
-            CssTextbox = await Add(new TextInput
-            {
-                Text = code,
-                Lines = 3
-            }.Background(color: "#333").Padding(5).Font(11, color: "#7da").Border(0));
+            await Add(CssTextbox);
 
-            CssTextbox.Height.BindTo(CssTextbox.Width, CssTextbox.Padding.Top, CssTextbox.Padding.Bottom,
-                (w, pt, pb) => (CssTextbox.Font.GetTextHeight(w, code) * 1.05f + pt + pb).LimitMax(500));
+            CssTextbox.Height.BindTo(CssTextbox.Padding.Top, CssTextbox.Padding.Bottom,
+                (pt, pb) => (CalculateCssContentHeight() + pt + pb).LimitMax(500));
         }
 
-        async Task FilterAttributes()
+        float CalculateCssContentHeight()
         {
-            LastFilterChanged = DateTime.Now;
-            await PropertiesContainer.ClearChildren();
-            await AddProperties(AttributeFilter.Text, LastFilterChanged);
+            return CssTextbox.Font.GetTextHeight(CssTextbox.ActualWidth, CurrentCss) * 1.05f;
         }
 
-        async Task AddProperties(string filter = "", DateTime? triggeredOn = null)
+        bool ShouldIgnore(PropertyFormField item)
         {
-            filter = filter?.Trim() ?? "";
+            if (CurrentSettings.Lacks(item.Item)) return true;
+            if (SearchKeywords.None()) return false;
+            return !item.SearchKeywords.ContainsAll(SearchKeywords, caseSensitive: false);
+        }
 
-            if (PropertiesContainer == null)
-                await Add(PropertiesContainer = new Stack());
+        bool ShouldIgnore(string group)
+        {
+            if (CurrentSettings.Select(x => x.Group).Lacks(group)) return true;
+            if (SearchKeywords.None()) return false;
+            return Fields.Where(x => x.Value.Group == group).All(x => x.Value.Field.Ignored);
+        }
 
-            var settings = Inspector.GetSettings(View).ToList();
+        Task EnsureProperties()
+        {
+            return UIWorkBatch.Run(async () =>
+           {
+               var validGroups = CurrentSettings.Select(x => x.Group).ToArray();
 
-            foreach (var group in settings.GroupBy(x => x.Group))
+               // Old ones to ignore:
+               foreach (var view in Fields.Where(x => ShouldIgnore(x.Value)))
+                   await view.Value.Field.IgnoredAsync();
+
+               foreach (var group in CurrentSettings.GroupBy(x => x.Group))
+               {
+                   await AddOrReviveGroup(group.Key);
+
+                   foreach (var item in group)
+                   {
+                       await AddOrReviveField(item);
+                       Zebble.Device.Log.Message("Added: " + item.Key + "|" + item.Property.DeclaringType + "." + item.Property.Name);
+                   }
+               }
+
+               foreach (var view in GroupViews.Where(x => ShouldIgnore(x.Key)))
+                   await view.Value.IgnoredAsync();
+           });
+        }
+
+        Task FilterAttributes()
+        {
+            SearchKeywords = AttributeFilter.Text.OrEmpty().Split(' ');
+            return EnsureProperties();
+        }
+
+        async Task AddOrReviveGroup(string group)
+        {
+            if (GroupViews.ContainsKey(group))
+                await GroupViews[group].IgnoredAsync(false);
+            else
+                GroupViews[group] = await PropertiesContainer.Add(new TextView(group).Font(20).Margin(vertical: 10));
+        }
+
+        async Task AddOrReviveField(Inspector.PropertySettings item)
+        {
+            var field = Fields.GetOrDefault(item.Key);
+
+            if (field != null) await field.Field.IgnoredAsync(false);
+            else
             {
-                if (!group.Key.Contains(filter, caseSensitive: false) && !group.Any(item => item.Label.TrimStart(item.Group).ToLiteralFromPascalCase().Contains(filter, caseSensitive: false)))
-                    continue;
+                field = Fields[item.Key] = await Create(item);
 
-                await PropertiesContainer.Add(new TextView(group.Key)
-                    .ChangeInBatch(x => x.Font(20).Margin(top: 10, bottom: PropertiesContainer.AllChildren.Count == 0 ? 10 : 5)));
-
-                foreach (var item in group)
-                {
-                    if (triggeredOn != null && triggeredOn != LastFilterChanged) return;
-
-                    var labelText = item.Label.TrimStart(item.Group).ToLiteralFromPascalCase();
-
-                    if (!group.Key.Contains(filter, caseSensitive: false) && !labelText.Contains(filter, caseSensitive: false))
-                        continue;
-
-                    var field = CreateField(item).Set(x => x.Direction = RepeatDirection.Horizontal).ChangeInBatch(x => x.Height(20).Margin(bottom: 1)).Data("Prop", item);
-                    field.Label.ChangeInBatch(x => x.Text(labelText).Font(12, color: "#aaa").Padding(3).Width(50.Percent()));
-
-                    await PropertiesContainer.Add(field);
-
-                    if (item.Notes.HasValue())
-                    {
-                        await field.Add(new TextView("?")
-                            .Background(Colors.Gray).Size(15).TextAlignment(Alignment.Middle)
-                            .Round().On(x => x.Tapped,
-                            () => { Zebble.Device.Log.Warning(item.Notes); return Task.CompletedTask; }));
-                    }
-
-                    if (item.Instance is ITrackable tra) await field.Add(GetTrackerIcon(tra));
-
-                    if (item.Instance is Gap)
-                    {
-                        await field.Add(GetTrackerIcon(item.View.Css, item.View.Style));
-                    }
-                }
+                if (field.Field.GetControl() is TextInput it)
+                    it.UserFocusChanged.Handle(focused => ScrollEnabledChange.Raise(!focused));
+                await PropertiesContainer.Add(field.Field);
             }
+
+            field.Load(item);
+
+            if (ShouldIgnore(field))
+                await field.Field.IgnoredAsync();
         }
 
-        static TextView GetTrackerIcon(params ITrackable[] trackables)
+        public static async Task<PropertyFormField> Create(Inspector.PropertySettings item)
         {
-            return new TextView("⌕").Font(16, color: Colors.Pink).Size(16).Margin(left: 2)
-                                 .TextAlignment(Alignment.Middle).Round().On(x => x.Tapped,
-                                () =>
-                                {
-                                    LayoutTracker.StartTracking(trackables);
-                                    Nav.Reload().RunInParallel();
-                                });
+            var field = CreateField(item);
+
+            var result = new PropertyFormField(field);
+
+            var labelText = item.Label.TrimStart(item.Group).ToLiteralFromPascalCase();
+
+            field.Set(x => x.Direction = RepeatDirection.Horizontal).ChangeInBatch(x => x.Height(20).Margin(bottom: 1));
+            field.Label.ChangeInBatch(x => x.Text(labelText).Font(12, color: "#aaa").Padding(3).Width(50.Percent()));
+
+            // if (item.Instance is Gap)
+            //    await field.Add(GetTrackerIcon(item.View.Css, item.View.Style));
+
+            return result;
         }
 
-        FormField CreateField(Inspector.PropertySettings prop)
+        static FormField CreateField(Inspector.PropertySettings prop)
         {
             if (prop.Property.CanWrite == false)
                 return new FormField<TextView> { Value = prop.ExistingValue }
@@ -161,7 +192,7 @@
             return CreateTextField(prop);
         }
 
-        FormField CreateTextField(Inspector.PropertySettings prop)
+        static FormField CreateTextField(Inspector.PropertySettings prop)
         {
             var result = new FormField<TextInput>
             {
@@ -190,14 +221,12 @@
                 }
             });
 
-            result.Control.UserFocusChanged.Handle(focused => ScrollEnabledChange.Raise(!focused));
-
             result.Control.ChangeInBatch(x => x.Font(12).Background(color: "#111").TextColor("#eee").Padding(3).Border(0));
             result.Control.UserTextChanged.Handle(() => UpdateValue(result, result.Control.Text.OrEmpty()));
             return result;
         }
 
-        async Task UpdateValue(FormField field, string newValue)
+        static async Task UpdateValue(FormField field, string newValue)
         {
             var prop = field.Data<Inspector.PropertySettings>("Prop");
 
@@ -206,15 +235,14 @@
                 try
                 {
                     prop.Property.SetValue(prop.Instance, newValue.To(prop.Property.PropertyType));
-                    Error.Text(string.Empty).Ignored();
                     field.Background(color: Colors.Transparent);
                 }
                 catch (Exception ex)
                 {
                     field.Background(color: Colors.DarkRed);
-                    Error.Text(ex.Message).Ignored(value: false);
                 }
-            };
+            }
+;
 
             prop.View.Animate(x => setValue()).RunInParallel();
 
@@ -238,25 +266,15 @@
         Button CreateBringToFrontButton()
         {
             var result = new Button { Text = "Bring to front" }.TextColor(Colors.LightGreen).Margin(10).Padding(0);
-            result.Tapped.Handle(View.BringToFront);
+            result.Tapped.Handle(() => View.BringToFront());
             return result;
         }
 
         Button CreateSendToBackButton()
         {
             var result = new Button { Text = "Send to back" }.TextColor(Colors.LightBlue).Margin(10).Padding(0);
-            result.Tapped.Handle(View.SendToBack);
+            result.Tapped.Handle(() => View.SendToBack());
             return result;
-        }
-
-        TextView CreateTypeInfo()
-        {
-            var text = View.GetType().WithAllParents()
-                .TakeWhile(x => x != typeof(View))
-                .Select(x => x.GetProgrammingName(useGlobal: false, useNamespace: false, useNamespaceForParams: false))
-                .ToString("\r\n➤ ");
-
-            return new TextView().TextColor("#888").Background("#333").Padding(5).Margin(bottom: 5).Text("Type ➝ " + text);
         }
     }
 }

@@ -68,6 +68,7 @@
                 name = name.TrimStart("Margin");
                 group = "Frame - Margin";
             }
+
             if (name.StartsWith("Padding"))
             {
                 lengthOwner = view.Padding;
@@ -77,7 +78,7 @@
 
             var length = lengthOwner.GetType().GetField(name).GetValue(lengthOwner) as Length;
             var property = typeof(Length).GetProperty(nameof(Length.AsText));
-            return new PropertySettings(length, property, view, group)
+            return new PropertySettings(length, property, view, group, type.ToString())
             {
                 Label = name,
                 Notes = length.Dependencies
@@ -109,9 +110,9 @@
             public View View;
             public object Instance, ExistingValue;
             public PropertyInfo Property;
-            public string Group, Label, Notes;
+            public string Group, Label, Notes, Key;
 
-            public PropertySettings(object instance, PropertyInfo property, View view, string group)
+            public PropertySettings(object instance, PropertyInfo property, View view, string group, string middlePath = null)
             {
                 Instance = instance;
                 Property = property;
@@ -119,6 +120,8 @@
                 ExistingValue = Property.GetValue(Instance);
                 View = view;
                 Group = group;
+
+                Key = Group + "|" + middlePath + "-" + Property.DeclaringType.Name + "-" + Property.Name + "-" + Property.PropertyType.Name;
             }
 
             public override string ToString() => Group + "." + Label + " => " + ExistingValue;

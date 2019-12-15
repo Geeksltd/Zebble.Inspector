@@ -11,11 +11,11 @@ namespace Zebble.UWP
         internal const int WIDTH = 600;
         const string SELECTED = "#43aaa9";
 
-        Stack HeaderBar;
-        internal ScrollView TreeScroller, PropertiesScroller, DeviceScroller;
+        Stack HeaderBar, Row;
+        internal ScrollView TreeScroller, DeviceScroller;
+        internal PropertiesScroller PropertiesScroller = new PropertiesScroller();
         TreeView Tree;
         Button CloseButton;
-        Stack Row;
         View PageButton, DeviceButton;
         List<View> PageTabs = new List<View>();
         List<View> DeviceTabs = new List<View>();
@@ -48,14 +48,14 @@ namespace Zebble.UWP
             TreeScroller = await Row.Add(new ScrollView().Id("TreeScroller").Width(60.Percent())
                 .Background(color: "#333"));
 
-            PropertiesScroller = await Row.Add(new ScrollView().Width(40.Percent()).Background(color: "#222"));
-
             new[] { TreeScroller, PropertiesScroller }.Do(x =>
             {
                 x.ShowHorizontalScrollBars = x.ShowVerticalScrollBars = true;
                 x.Padding(10).Height(100.Percent());
                 x.ShowVerticalScrollBars = false;
             });
+
+            await Row.WhenShown(() => Row.Add(PropertiesScroller));
 
             await CreateTreeView();
 
@@ -83,19 +83,11 @@ namespace Zebble.UWP
                 PropertiesScroller = null;
             }
 
-            DeviceScroller = await Row.Add(new ScrollView().Id("DeviceScroller").Background(color: "#111"));
-
-            new[] { DeviceScroller }.Do(x =>
+            DeviceScroller = await Row.Add(new ScrollView()
             {
-                x.ShowHorizontalScrollBars = x.ShowVerticalScrollBars = true;
-                x.Padding(10).Height(100.Percent());
-                x.ShowVerticalScrollBars = false;
-            });
-
-            new[] { DeviceScroller }.Do(x =>
-            {
-                x.Padding(0);
-            });
+                ShowVerticalScrollBars = false,
+                ShowHorizontalScrollBars = true
+            }.Id("DeviceScroller").Background(color: "#111").Padding(10).Height(100.Percent()));
 
             await LoadDevice();
 
@@ -186,7 +178,7 @@ namespace Zebble.UWP
 
         View CreateMemoryWarningButton()
         {
-            var result = CreateButton("Warning.png");            
+            var result = CreateButton("Warning.png");
             result.On(x => x.Tapped, () => Device.Log.Error("Fix CreateMemoryWarningButton()!"));
             return result;
         }
@@ -215,7 +207,7 @@ namespace Zebble.UWP
                 {
                     result.AllChildren.Except(button).Do(x => x.Background("#666"));
                     button.Background(SELECTED);
-                    UIRuntime.RenderRoot.CssClass = platform.RootCss;
+                    await UIRuntime.RenderRoot.SetCssClass(platform.RootCss);
                     CssEngine.Platform = platform.Platform;
 
                     await Nav.FullRefresh();

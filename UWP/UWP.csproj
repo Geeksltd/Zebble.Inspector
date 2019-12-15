@@ -1,8 +1,8 @@
 ﻿<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
-    <TargetPlatformVersion>10.0.17134.0</TargetPlatformVersion>
-    <TargetPlatformMinVersion>10.0.10240.0</TargetPlatformMinVersion>
+    <TargetPlatformVersion>10.0.18362.0</TargetPlatformVersion>
+    <TargetPlatformMinVersion>10.0.14393.0</TargetPlatformMinVersion>
     <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
@@ -122,6 +122,8 @@
     <Compile Include="Inspector.Settings.cs" />
     <Compile Include="Inspector.Styles.cs" />
     <Compile Include="PropertiesList.cs" />
+    <Compile Include="PropertiesScroller.cs" />
+    <Compile Include="PropertyFormField.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\Accelerometer.png" />
@@ -148,7 +150,7 @@
       <Version>4.3.2</Version>
     </PackageReference>
     <PackageReference Include="Zebble">
-      <Version>4.4.239</Version>
+      <Version>4.4.317</Version>
     </PackageReference>
     <PackageReference Include="Zebble.CheckBox">
       <Version>1.22.115</Version>
@@ -157,7 +159,7 @@
       <Version>1.0.110</Version>
     </PackageReference>
     <PackageReference Include="Zebble.Sensors">
-      <Version>1.1.104</Version>
+      <Version>1.1.105</Version>
     </PackageReference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
@@ -165,6 +167,6 @@
   </PropertyGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\WindowsXaml\v$(VisualStudioVersion)\Microsoft.Windows.UI.Xaml.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>copy /y $(TargetDir)*.* C:\Users\Administrator\.nuget\packages\zebble.inspector\2.7.140\runtimes\win10-x86\lib\uap10.0</PostBuildEvent>
+    <PostBuildEvent>$(OutDir)--Copy-for-local-testing.bat</PostBuildEvent>
   </PropertyGroup>
 </Project>
