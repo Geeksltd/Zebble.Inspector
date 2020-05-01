@@ -17,7 +17,6 @@
         TextView TypeInfo = new TextView().TextColor("#888").Background("#333").Padding(5).Margin(bottom: 5);
         TextInput AttributeFilter = new TextInput { Placeholder = "Search..." };
         Stack PropertiesContainer = new Stack();
-        Dictionary<string, TextView> GroupViews = new Dictionary<string, TextView>();
         Dictionary<string, PropertyFormField> Fields = new Dictionary<string, PropertyFormField>();
 
         internal AsyncEvent<bool> ScrollEnabledChange = new AsyncEvent<bool>();
@@ -123,8 +122,8 @@
                        await AddOrReviveField(item);
                }
 
-               foreach (var view in GroupViews.Where(x => ShouldIgnore(x.Key)))
-                   await view.Value.IgnoredAsync();
+               var notRelevant = PropertiesContainer.AllChildren.OfType<GroupView>().Where(x => ShouldIgnore(x.Text)).ToArray();
+               foreach (var view in notRelevant) await view.IgnoredAsync();
            });
         }
 
@@ -136,10 +135,10 @@
 
         async Task AddOrReviveGroup(string group)
         {
-            if (GroupViews.ContainsKey(group))
-                await GroupViews[group].IgnoredAsync(false);
-            else
-                GroupViews[group] = await PropertiesContainer.Add(new TextView(group).Font(20).Margin(vertical: 10));
+            var view = PropertiesContainer.AllChildren.OfType<GroupView>().FirstOrDefault(v => v.Text == group);
+
+            if (view != null) await view.IgnoredAsync(false);
+            else await PropertiesContainer.Add(new GroupView(group));
         }
 
         async Task AddOrReviveField(Inspector.PropertySettings item)
