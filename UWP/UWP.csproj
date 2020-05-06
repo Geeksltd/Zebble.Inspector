@@ -151,7 +151,7 @@
       <Version>4.3.2</Version>
     </PackageReference>
     <PackageReference Include="Zebble">
-      <Version>4.4.333</Version>
+      <Version>4.4.334</Version>
     </PackageReference>
     <PackageReference Include="Zebble.CheckBox">
       <Version>1.22.115</Version>
@@ -168,6 +168,6 @@
   </PropertyGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\WindowsXaml\v$(VisualStudioVersion)\Microsoft.Windows.UI.Xaml.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>copy /y $(OutDir)\Zebble.Inspector.* C:\Users\Administrator\.nuget\packages\zebble.inspector\2.7.141\lib\UAP10</PostBuildEvent>
+    <PostBuildEvent>copy /y $(OutDir)\Zebble.Inspector.* C:\Users\Administrator\.nuget\packages\zebble.inspector\2.7.145\lib\UAP10</PostBuildEvent>
   </PropertyGroup>
 </Project>

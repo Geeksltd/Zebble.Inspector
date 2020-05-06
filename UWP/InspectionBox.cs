@@ -169,7 +169,7 @@ namespace Zebble.UWP
                      var oldWidth = Device.Screen.Width;
                      var oldHeight = Device.Screen.Height;
 
-                     await Device.Screen.ConfigureSize(() => oldHeight, () => oldWidth);
+                     Device.Screen.ConfigureSize(() => oldHeight, () => oldWidth);
                      Inspector.Current.IsRotating = false;
 
                      await Inspector.Current.Resize();

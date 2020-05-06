@@ -111,7 +111,7 @@
                var validGroups = CurrentSettings.Select(x => x.Group).ToArray();
 
                // Old ones to ignore:
-               foreach (var view in Fields.Where(x => ShouldIgnore(x.Value)))
+               foreach (var view in Fields.Where(x => ShouldIgnore(x.Value)).ToArray())
                    await view.Value.Field.IgnoredAsync();
 
                foreach (var group in CurrentSettings.GroupBy(x => x.Group))
