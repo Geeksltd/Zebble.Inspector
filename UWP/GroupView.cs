@@ -1,16 +1,21 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Zebble.UWP
 {
-    public class GroupView : TextView
+    public class GroupView : GeneralRecyclerListViewItem
     {
-        public GroupView(string group) : base(group)
+        TextView TextView = new TextView().Font(18).Margin(vertical: 10);
+
+        public GroupView()
         {
-            this.Font(20).Margin(vertical: 10);
+            Item.Changed += () => TextView.Text = Item.Value.ToStringOrEmpty();
+        }
+
+        public override async Task OnInitializing()
+        {
+            await base.OnInitializing();
+            await Content.Add(TextView);
         }
     }
 }

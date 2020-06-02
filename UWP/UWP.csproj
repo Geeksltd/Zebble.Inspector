@@ -123,6 +123,7 @@
     <Compile Include="Inspector.Settings.cs" />
     <Compile Include="Inspector.Styles.cs" />
     <Compile Include="PropertiesList.cs" />
+    <Compile Include="PropertiesRecyclerList.cs" />
     <Compile Include="PropertiesScroller.cs" />
     <Compile Include="PropertyFormField.cs" />
   </ItemGroup>
@@ -151,10 +152,13 @@
       <Version>4.3.2</Version>
     </PackageReference>
     <PackageReference Include="Zebble">
-      <Version>4.4.334</Version>
+      <Version>4.4.347</Version>
     </PackageReference>
     <PackageReference Include="Zebble.CheckBox">
       <Version>1.22.115</Version>
+    </PackageReference>
+    <PackageReference Include="Zebble.ListView">
+      <Version>4.10.168</Version>
     </PackageReference>
     <PackageReference Include="Zebble.Location">
       <Version>1.0.110</Version>
