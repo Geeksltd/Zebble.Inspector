@@ -220,10 +220,10 @@ namespace Zebble.UWP
         static DeviceSpec[] GetStandardDevices()
         {
             return new[] {
-              new DeviceSpec(DevicePlatform.Windows,  "Windows", "windows-only" ),
-               new DeviceSpec(DevicePlatform.Android,"Android", "android-only" ),
-               new DeviceSpec(DevicePlatform.IOS,"iOS", "ios-only" ),
-           };
+                new DeviceSpec(DevicePlatform.Windows,  "Windows", "windows-only" ),
+                new DeviceSpec(DevicePlatform.Android,"Android", "android-only" ),
+                new DeviceSpec(DevicePlatform.IOS,"iOS", "ios-only" ),
+            };
         }
 
         class DeviceSpec
