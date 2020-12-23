@@ -49,7 +49,7 @@
             }
             catch (Exception ex)
             {
-                await Alert.Show("Internal error occured: " + ex.Message)
+                await Alert.Show("Internal error occurred: " + ex.Message)
                     .ConfigureAwait(continueOnCapturedContext: false);
             }
         }
@@ -72,25 +72,23 @@
             var done = false;
 
             Thread.UI.Post(async () =>
-           {
-               var appView = ApplicationView.GetForCurrentView();
-               var newSize = new Size((float)width, (float)appView.VisibleBounds.Height);
+            {
+                var appView = ApplicationView.GetForCurrentView();
+                var newSize = new Size((float)width, (float)appView.VisibleBounds.Height);
 
-               Windows.Foundation.TypedEventHandler<ApplicationView, object> changed = null;
+                void Changed(ApplicationView _, object __)
+                {
+                    done = true;
+                    appView.VisibleBoundsChanged -= Changed;
+                    source.TrySetResult(result: true);
+                }
 
-               changed = (_, __) =>
-               {
-                   done = true;
-                   appView.VisibleBoundsChanged -= changed;
-                   source.TrySetResult(result: true);
-               };
+                appView.VisibleBoundsChanged += Changed;
+                appView.TryResizeView(new Windows.Foundation.Size(newSize.Width, newSize.Height));
 
-               appView.VisibleBoundsChanged += changed;
-               appView.TryResizeView(new Windows.Foundation.Size(newSize.Width, newSize.Height));
-
-               await Task.Delay(2.Seconds());
-               if (!done) source.TrySetResult(result: false);
-           });
+                await Task.Delay(2.Seconds());
+                if (!done) source.TrySetResult(result: false);
+            });
 
             return source.Task;
         }
