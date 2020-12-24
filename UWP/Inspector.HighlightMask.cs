@@ -39,7 +39,7 @@ namespace Zebble.UWP
 
                 await highlighter.Visible().BringToFront();
 
-                foreach (var s in CurrentView.GetAllParents().OfType<ScrollView>())
+                foreach (var s in item.GetAllParents().OfType<ScrollView>())
                 {
                     highlighter.X.UpdateOn(s.UserScrolledHorizontally, s.ApiScrolledTo);
                     highlighter.Y.UpdateOn(s.UserScrolledVertically, s.ApiScrolledTo);

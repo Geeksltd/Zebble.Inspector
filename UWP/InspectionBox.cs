@@ -13,7 +13,7 @@ namespace Zebble.UWP
         Stack HeaderBar, Row;
         internal ScrollView TreeScroller, DeviceScroller;
         internal PropertiesScroller PropertiesScroller = new PropertiesScroller();
-        TreeView Tree;
+        internal TreeView Tree;
         Button CloseButton;
         View PageButton, DeviceButton;
         List<View> PageTabs = new List<View>();

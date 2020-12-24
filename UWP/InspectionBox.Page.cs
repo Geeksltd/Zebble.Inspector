@@ -57,10 +57,13 @@
 
         async Task HighlightSelectedNode()
         {
-            foreach (var view in Tree.AllNodes.Except(x => x.Source == Inspector.Current.CurrentView).Select(x => x.View))
+            var currentView = Inspector.Current.CurrentView;
+            if (currentView == null) return;
+
+            foreach (var view in Tree.AllNodes.Except(x => x.Source == currentView).Select(x => x.View))
                 view.Perform(x => x.Style.TextColor = null);
 
-            var selectedNode = Tree.AllNodes.FirstOrDefault(x => x.Source as View == Inspector.Current.CurrentView);
+            var selectedNode = Tree.AllNodes.FirstOrDefault(x => x.Source as View == currentView);
 
             if (selectedNode?.View != null)
             {
