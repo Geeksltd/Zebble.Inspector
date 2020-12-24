@@ -126,6 +126,7 @@
     <Compile Include="PropertiesRecyclerList.cs" />
     <Compile Include="PropertiesScroller.cs" />
     <Compile Include="PropertyFormField.cs" />
+    <Compile Include="ViewExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\Accelerometer.png" />
@@ -172,6 +173,6 @@
   </PropertyGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\WindowsXaml\v$(VisualStudioVersion)\Microsoft.Windows.UI.Xaml.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>copy /y $(OutDir)\Zebble.Inspector.* C:\Users\Administrator\.nuget\packages\zebble.inspector\2.7.145\lib\UAP10</PostBuildEvent>
+	  <PostBuildEvent>copy /y $(OutDir)\Zebble.Inspector.* C:\Users\Administrator\.nuget\packages\zebble.inspector\2.7.145\lib\UAP10</PostBuildEvent>
   </PropertyGroup>
 </Project>
