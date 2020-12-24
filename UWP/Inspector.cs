@@ -8,9 +8,13 @@
     public partial class Inspector : IInspector
     {
         internal static Inspector Current => UIRuntime.Inspector as Inspector;
+        internal static bool SkipPageRefresh = false;
 
         internal InspectionBox InspectionBox;
-        internal View CurrentView;
+
+        internal string CurrentViewPath;
+        internal View CurrentView => GetCurrentView();
+
         public bool IsRotating { get; set; }
 
         public async Task Load(View view)
@@ -19,39 +23,52 @@
 
             try
             {
-                var objectPath = view.GetFullPath();
-
                 if (view.GetAllParents().Lacks(View.Root)) return;
 
                 if (InspectionBox.Ignored)
                 {
-                    CurrentView = null;
+                    SkipPageRefresh = true;
+
+                    var objectPath = view.GetFullyQualifiedPath();
+
+                    CurrentViewPath = null;
 
                     await Start();
 
                     for (var retries = 25; retries > 0; retries--)
                     {
                         if (InspectionBox.Ignored || CurrentView != null) return;
-                        view = Nav.CurrentPage?.CurrentDescendants().FirstOrDefault(v => v.GetFullPath() == objectPath);
+                        view = Nav.CurrentPage?.CurrentDescendants().FirstOrDefault(v => v.GetFullyQualifiedPath() == objectPath);
                         if (view != null) break;
                     }
-
-                    await Load(view);
                 }
-                else
-                {
-                    CurrentView = view;
 
-                    await HighlightItem();
-                    await InspectionBox.SelectCurrentNode();
-                    await InspectionBox.PropertiesScroller.Load();
-                }
+                await LoadEnsured(view);
             }
             catch (Exception ex)
             {
                 await Alert.Show("Internal error occurred: " + ex.Message)
                     .ConfigureAwait(continueOnCapturedContext: false);
             }
+            finally
+            {
+                Thread.Pool.Post(async () =>
+                {
+                    await Task.Delay(3.Seconds());
+                    SkipPageRefresh = false;
+                });
+            }
+        }
+
+        async Task LoadEnsured(View view)
+        {
+            if (view == null) return;
+
+            CurrentViewPath = view.GetFullyQualifiedPath();
+
+            await HighlightItem();
+            await InspectionBox.SelectCurrentNode();
+            await InspectionBox.PropertiesScroller.Load();
         }
 
         async Task Start()

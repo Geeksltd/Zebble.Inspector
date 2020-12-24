@@ -2,6 +2,7 @@
 {
     using System;
     using System.Threading.Tasks;
+    using System.Linq;
 
     partial class Inspector : IInspector
     {
@@ -49,16 +50,39 @@
             try
             {
                 if (!IsOpen()) return;
+                if (SkipPageRefresh) return;
 
                 HideHighlighters();
 
-                CurrentView = null;
+                CurrentViewPath = null;
                 await (InspectionBox.PropertiesScroller?.Reset()).OrCompleted();
             }
             catch (Exception ex)
             {
                 await Alert.Show("Internal error: " + ex.Message).ConfigureAwait(continueOnCapturedContext: false);
             }
+        }
+
+        /// <summary>
+        /// This method will find the most recent instance
+        /// of the selected path
+        /// </summary>
+        /// <returns></returns>
+        View GetCurrentView()
+        {
+            var currentViewPath = Current.CurrentViewPath;
+            if (currentViewPath == null) return null;
+
+            var tree = InspectionBox.Tree;
+            if (tree == null) return null;
+
+            var allNodes = tree.AllNodes.ExceptNull().ToArray();
+            var currentView = allNodes
+                .Select(x => x.Source is View view ? view : null)
+                .Where(x => x != null)
+                .FirstOrDefault(x => x.GetFullyQualifiedPath() == currentViewPath);
+
+            return currentView;
         }
     }
 }
