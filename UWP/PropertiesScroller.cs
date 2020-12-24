@@ -1,7 +1,7 @@
-﻿using System.Threading.Tasks;
-
-namespace Zebble.UWP
+﻿namespace Zebble.UWP
 {
+    using System.Threading.Tasks;
+
     public class PropertiesScroller : ScrollView
     {
         PropertiesList PropertiesBox = new PropertiesList();
@@ -20,8 +20,10 @@ namespace Zebble.UWP
 
         internal async Task Load()
         {
-            if (Inspector.Current.CurrentView == null) return;
-            await PropertiesBox.Load(Inspector.Current.CurrentView);
+            var currentView = Inspector.Current.CurrentView;
+            if (currentView == null) return;
+
+            await PropertiesBox.Load(currentView);
         }
 
         internal Task Reset() => PropertiesBox.Reset();
