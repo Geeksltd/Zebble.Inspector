@@ -3,7 +3,6 @@ namespace Zebble.UWP
     using Services;
     using System;
     using System.Collections.Generic;
-    using System.Linq;
     using System.Threading.Tasks;
 
     partial class InspectionBox : Stack
@@ -117,11 +116,11 @@ namespace Zebble.UWP
 
             PageTabs.AddRange(new List<View> {
                 CreateButton("Refresh.png")
-                .On(x => x.Tapped, () => { Nav.DisposeCache(); return Nav.Reload(); }).Absolute().X(350),
+                    .On(x => x.Tapped, () => { Nav.DisposeCache(); return Nav.Reload(); }).Absolute().X(350),
                 new TextView("CSS platform: ") { AutoSizeWidth = true }.Margin(left:320)
-                .TextColor("#999")
-                .TextAlignment(Alignment.Middle)
-                .Height(100.Percent()),
+                    .TextColor("#999")
+                    .TextAlignment(Alignment.Middle)
+                    .Height(100.Percent()),
                 await CreateDevicePicker()
             });
 
@@ -139,7 +138,7 @@ namespace Zebble.UWP
                 CreateMemoryWarningButton(),
                 new TextView().Width(8).Height(100.Percent()).Border(color:"#777", left:1),
                 geoLocationButton
-    });
+            });
 
             await HeaderBar.AddRange(PageTabs);
             await HeaderBar.AddRange(DeviceTabs);
