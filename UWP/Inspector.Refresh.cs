@@ -72,17 +72,9 @@
         {
             var currentViewPath = Current.CurrentViewPath;
             if (currentViewPath == null) return null;
-
-            var tree = InspectionBox.Tree;
-            if (tree == null) return null;
-
-            var allNodes = tree.AllNodes.ExceptNull().ToArray();
-            var currentView = allNodes
-                .Select(x => x.Source is View view ? view : null)
-                .Where(x => x != null)
+            
+            return InspectionBox.Tree?.AllNodes.ExceptNull().Select(x => x.Source).OfType<View>()
                 .FirstOrDefault(x => x.GetFullyQualifiedPath() == currentViewPath);
-
-            return currentView;
         }
     }
 }
