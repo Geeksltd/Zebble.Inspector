@@ -4,7 +4,7 @@
     using System.Threading.Tasks;
     using System.Linq;
 
-    partial class Inspector : IInspector
+    partial class Inspector
     {
         static DateTime LastDomUpdated, LastTreeUpdated;
 
@@ -50,7 +50,7 @@
             try
             {
                 if (!IsOpen()) return;
-                if (SkipPageRefresh) return;
+                if (UIRuntime.SkipPageRefresh) return;
 
                 HideHighlighters();
 
@@ -72,7 +72,7 @@
         {
             var currentViewPath = Current.CurrentViewPath;
             if (currentViewPath == null) return null;
-            
+
             return InspectionBox.Tree?.AllNodes.ExceptNull().Select(x => x.Source).OfType<View>()
                 .FirstOrDefault(x => x.GetFullyQualifiedPath() == currentViewPath);
         }

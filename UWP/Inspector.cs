@@ -1,14 +1,12 @@
 ﻿namespace Zebble.UWP
 {
     using System;
-    using System.Linq;
     using System.Threading.Tasks;
     using Windows.UI.ViewManagement;
 
     public partial class Inspector : IInspector
     {
         internal static Inspector Current => UIRuntime.Inspector as Inspector;
-        internal static bool SkipPageRefresh = false;
 
         internal InspectionBox InspectionBox;
 
@@ -27,20 +25,9 @@
 
                 if (InspectionBox.Ignored)
                 {
-                    SkipPageRefresh = true;
-
-                    var objectPath = view.GetFullyQualifiedPath();
-
                     CurrentViewPath = null;
 
                     await Start();
-
-                    for (var retries = 25; retries > 0; retries--)
-                    {
-                        if (InspectionBox.Ignored || CurrentView != null) return;
-                        view = Nav.CurrentPage?.CurrentDescendants().FirstOrDefault(v => v.GetFullyQualifiedPath() == objectPath);
-                        if (view != null) break;
-                    }
                 }
 
                 await LoadEnsured(view);
@@ -49,14 +36,6 @@
             {
                 await Alert.Show("Internal error occurred: " + ex.Message)
                     .ConfigureAwait(continueOnCapturedContext: false);
-            }
-            finally
-            {
-                Thread.Pool.Post(async () =>
-                {
-                    await Task.Delay(3.Seconds());
-                    SkipPageRefresh = false;
-                });
             }
         }
 
