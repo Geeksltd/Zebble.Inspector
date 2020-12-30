@@ -3,6 +3,7 @@
     using System;
     using System.Threading.Tasks;
     using Windows.UI.ViewManagement;
+    using Olive;
 
     public partial class Inspector : IInspector
     {

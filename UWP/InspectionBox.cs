@@ -1,9 +1,9 @@
 namespace Zebble.UWP
 {
     using Services;
-    using System;
     using System.Collections.Generic;
     using System.Threading.Tasks;
+    using Olive;
 
     partial class InspectionBox : Stack
     {
@@ -186,7 +186,7 @@ namespace Zebble.UWP
         {
             return new ImageView
             {
-                ImageData = GetType().GetAssembly()
+                ImageData = GetType().Assembly
                 .ReadEmbeddedResource("Zebble.UWP.Resources." + name)
             }.Size(32).Padding(6);
         }

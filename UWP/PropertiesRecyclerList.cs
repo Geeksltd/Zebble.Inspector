@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using System.Threading.Tasks;
 using Windows.System;
+using Olive;
 
 namespace Zebble.UWP
 {
@@ -97,7 +97,7 @@ namespace Zebble.UWP
 
             var add = 1.0;
 
-            if (Control.Text.Contains(".")) add = 1.0 / Math.Pow(10, Control.Text.TrimBefore(".", trimPhrase: true).Length);
+            if (Control.Text.Contains(".")) add = 1.0 / Math.Pow(10, Control.Text.RemoveBefore(".").Trim().Length);
 
             if (add == 1 && Setting.Label == "Opacity") add = 0.1;
 

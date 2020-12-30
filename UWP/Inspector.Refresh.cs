@@ -3,6 +3,7 @@
     using System;
     using System.Threading.Tasks;
     using System.Linq;
+    using Olive;
 
     partial class Inspector
     {

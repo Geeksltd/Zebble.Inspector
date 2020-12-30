@@ -1,0 +1,110 @@
+﻿<Project Sdk="MSBuild.Sdk.Extras/3.0.22">
+  <PropertyGroup>
+    <TargetFrameworks></TargetFrameworks>
+    <TargetFrameworks Condition=" '$(OS)' == 'Windows_NT' ">uap10.0.18362</TargetFrameworks>
+    <AssemblyName>Zebble.Inspector</AssemblyName>
+    <RootNamespace>Zebble</RootNamespace>
+    <PackageId>Zebble.Inspector</PackageId>
+    <Product>$(AssemblyName) ($(TargetFramework))</Product>
+    <Version>2.7.147</Version>
+    <PackOnBuild>true</PackOnBuild>
+    <NeutralLanguage>en</NeutralLanguage>
+    <LangVersion>default</LangVersion>
+    <DefineConstants>$(DefineConstants);</DefineConstants>
+    <UseFullSemVerForNuGet>false</UseFullSemVerForNuGet>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+    <LangVersion>latest</LangVersion>
+    <DebugType>portable</DebugType>
+    <PackageLicenseUrl>https://raw.githubusercontent.com/Geeksltd/Zebble.Inspector/master/Zebble-LicenseAgreement.txt</PackageLicenseUrl>
+    <PackageProjectUrl>https://nuget.org/packages/Zebble.Inspector/</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/Geeksltd/Zebble.Inspector/</RepositoryUrl>
+    <PackageIconUrl>https://raw.githubusercontent.com/Geeksltd/Zebble.Inspector/master/icon.png</PackageIconUrl>
+    <PackageTags>xamarin, windows, ios, android, zebble</PackageTags>
+    <Title>Zebble.Inspector</Title>
+    <Description>Allows inspection of a running Zebble app on Windows during development.</Description>
+    <PackageReleaseNotes>Minor fixes</PackageReleaseNotes>
+    <Owners>Geeks Ltd</Owners>
+    <Authors>Geeks Ltd</Authors>
+    <Copyright>Geeks Ltd 2020, All rights reserved.</Copyright>
+    <DisableExtraReferences>true</DisableExtraReferences>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)'=='Debug' ">
+    <DebugSymbols>true</DebugSymbols>
+    <GenerateDocumentationFile>false</GenerateDocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)'=='Release' ">
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" $(TargetFramework.StartsWith('uap10.0')) ">
+    <DefineConstants>UWP</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition=" $(TargetFramework.StartsWith('MonoAndroid')) ">
+    <DefineConstants>ANDROID</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition=" $(TargetFramework.StartsWith('Xamarin.iOS')) ">
+    <DefineConstants>IOS</DefineConstants>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="Shared\**\*.cs" />
+  </ItemGroup>
+  <ItemGroup Condition=" $(TargetFramework.StartsWith('uap10.0')) ">
+    <Compile Include="UWP\**\*.cs" />
+  </ItemGroup>
+  <ItemGroup Condition=" $(TargetFramework.StartsWith('MonoAndroid')) ">
+    <Compile Include="Android\**\*.cs" />
+  </ItemGroup>
+  <ItemGroup Condition=" $(TargetFramework.StartsWith('Xamarin.iOS')) ">
+    <Compile Include="iOS\**\*.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove=".gitignore" />
+    <None Remove="icon.png" />
+    <None Remove="README.md" />
+    <None Remove="Resources\Accelerometer.png" />
+    <None Remove="Resources\Android.png" />
+    <None Remove="Resources\Back.png" />
+    <None Remove="Resources\Compass.png" />
+    <None Remove="Resources\Device.png" />
+    <None Remove="Resources\Earth.png" />
+    <None Remove="Resources\Gyroscope.png" />
+    <None Remove="Resources\IOS.png" />
+    <None Remove="Resources\Page.png" />
+    <None Remove="Resources\Refresh.png" />
+    <None Remove="Resources\Rotation.png" />
+    <None Remove="Resources\Shake.png" />
+    <None Remove="Resources\VS.png" />
+    <None Remove="Resources\Warning.png" />
+    <None Remove="Resources\Windows.png" />
+    <None Remove="Zebble-LicenseAgreement.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Accelerometer.png" />
+    <EmbeddedResource Include="Resources\Android.png" />
+    <EmbeddedResource Include="Resources\Back.png" />
+    <EmbeddedResource Include="Resources\Compass.png" />
+    <EmbeddedResource Include="Resources\Device.png" />
+    <EmbeddedResource Include="Resources\Earth.png" />
+    <EmbeddedResource Include="Resources\Gyroscope.png" />
+    <EmbeddedResource Include="Resources\IOS.png" />
+    <EmbeddedResource Include="Resources\Page.png" />
+    <EmbeddedResource Include="Resources\Refresh.png" />
+    <EmbeddedResource Include="Resources\Rotation.png" />
+    <EmbeddedResource Include="Resources\Shake.png" />
+    <EmbeddedResource Include="Resources\VS.png" />
+    <EmbeddedResource Include="Resources\Warning.png" />
+    <EmbeddedResource Include="Resources\Windows.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+    <PackageReference Include="Zebble" Version="4.5.422" />
+    <PackageReference Include="Zebble.CheckBox" Version="1.22.117" />
+    <PackageReference Include="Zebble.ListView" Version="4.10.180" />
+    <PackageReference Include="Zebble.Location" Version="1.0.114" />
+  </ItemGroup>
+  <ItemGroup>
+	<Folder Include="Android\" />
+	<Folder Include="iOS\" />
+	<Folder Include="UWP\" />
+  </ItemGroup>
+</Project>

@@ -1,9 +1,9 @@
 ﻿namespace Zebble.UWP
 {
-    using System;
     using System.Collections.Generic;
     using System.Threading.Tasks;
     using Zebble.Device;
+    using Olive;
 
     class DevicePanel : Stack
     {
@@ -81,13 +81,13 @@
         {
             return new ImageView
             {
-                ImageData = GetType().GetAssembly().ReadEmbeddedResource("Zebble.UWP", "Inspection/Resources/" + name)
+                ImageData = GetType().Assembly.ReadEmbeddedResource("Zebble.UWP", "Inspection/Resources/" + name)
             }.Size(32).Padding(6);
         }
 
         ImageView CreatePhone(string name)
         {
-            var img = GetType().GetAssembly().ReadEmbeddedResource("Zebble.UWP", "Inspection/Resources/" + name);
+            var img = GetType().Assembly.ReadEmbeddedResource("Zebble.UWP", "Inspection/Resources/" + name);
             Phone = new ImageView().Id("Target").Size(220, 250).Alignment(Alignment.Middle).Margin(top: 300);
             Phone.BackgroundImageData = img;
             return Phone;
