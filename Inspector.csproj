@@ -6,7 +6,7 @@
     <RootNamespace>Zebble</RootNamespace>
     <PackageId>Zebble.Inspector</PackageId>
     <Product>$(AssemblyName) ($(TargetFramework))</Product>
-    <Version>2.7.147</Version>
+    <Version>2.7.148.0</Version>
     <PackOnBuild>true</PackOnBuild>
     <NeutralLanguage>en</NeutralLanguage>
     <LangVersion>default</LangVersion>
@@ -103,8 +103,8 @@
     <PackageReference Include="Zebble.Location" Version="1.0.114" />
   </ItemGroup>
   <ItemGroup>
-	<Folder Include="Android\" />
-	<Folder Include="iOS\" />
-	<Folder Include="UWP\" />
+    <Folder Include="Android\" />
+    <Folder Include="iOS\" />
+    <Folder Include="UWP\" />
   </ItemGroup>
 </Project>
