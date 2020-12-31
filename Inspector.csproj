@@ -63,6 +63,12 @@
     <EmbeddedResource Include="Resources\Windows.png" />
   </ItemGroup>
   <ItemGroup>
+    <None Remove=".gitignore" />
+    <None Remove="icon.png" />
+    <None Remove="README.md" />
+    <None Remove="Zebble-LicenseAgreement.txt" />
+  </ItemGroup>
+  <ItemGroup>
     <PackageReference Include="Zebble" Version="4.5.423" />
     <PackageReference Include="Zebble.CheckBox" Version="1.22.118" />
     <PackageReference Include="Zebble.ListView" Version="4.10.181" />

@@ -125,7 +125,7 @@
                 };
                 configButton.Tapped.Handle(() =>
                 {
-                    EnvironmentSimulator.Location = new Services.GeoPosition
+                    EnvironmentSimulator.Location = new GeoPosition
                     {
                         Latitude = latField.GetValue<float>(),
                         Longitude = longField.GetValue<float>()
