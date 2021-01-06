@@ -187,7 +187,7 @@ namespace Zebble.UWP
             return new ImageView
             {
                 ImageData = GetType().Assembly
-                .ReadEmbeddedResource("Zebble.UWP.Resources." + name)
+                .ReadEmbeddedResource("Zebble.Resources." + name)
             }.Size(32).Padding(6);
         }
 
