@@ -55,7 +55,7 @@
 
         Task NotesTapped()
         {
-            Device.Log.Warning(Setting.Notes);
+            Log.For(this).Warning(Setting.Notes);
             return Task.CompletedTask;
         }
 
