@@ -178,7 +178,7 @@ namespace Zebble.UWP
         View CreateMemoryWarningButton()
         {
             var result = CreateButton("Warning.png");
-            result.On(x => x.Tapped, () => Log.For(this).Error(null, "Fix CreateMemoryWarningButton()!"));
+            result.On(x => x.Tapped, () => Log.For(this).Error("Fix CreateMemoryWarningButton()!"));
             return result;
         }
 
