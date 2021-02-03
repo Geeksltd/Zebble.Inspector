@@ -1,9 +1,9 @@
 ﻿namespace Zebble.UWP
 {
+    using Olive;
     using System.Collections.Generic;
     using System.Threading.Tasks;
     using Zebble.Device;
-    using Olive;
 
     class DevicePanel : Stack
     {

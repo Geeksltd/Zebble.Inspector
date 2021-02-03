@@ -50,8 +50,9 @@
             var path = currentView.WithAllParents().ToList();
 
             // Expand the path to the currently selected item:
-            foreach (var node in Tree.AllNodes.ExceptNull().ToArray())
-                if (node.Source is View nodeView && path.Contains(nodeView)) await node.Expand();
+            foreach (var node in Tree.AllNodes.ExceptNull().ToArray().Reverse())
+                if (node.Source is View nodeView && path.Contains(nodeView))
+                    await node.Expand();
 
             await HighlightSelectedNode();
         }
