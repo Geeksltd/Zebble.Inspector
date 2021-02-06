@@ -123,13 +123,16 @@
                     Text = "Set",
                     BackgroundColor = new GradientColor(GradientColor.Direction.Down).Add("#555", 50).EndWith("#444")
                 };
-                configButton.Tapped.Handle(() =>
+
+                configButton.Tapped
+                    .Handle(() =>
                 {
                     EnvironmentSimulator.Location = new GeoPosition
                     {
                         Latitude = latField.GetValue<float>(),
                         Longitude = longField.GetValue<float>()
                     };
+
                     GeoLocationForm.parent?.Remove(GeoLocationForm);
                     GeoLocationForm = null;
                 });

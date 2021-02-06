@@ -1,10 +1,10 @@
 ﻿namespace Zebble.UWP
 {
+    using Olive;
     using System;
     using System.Threading.Tasks;
     using Zebble;
     using Zebble.Services;
-    using Olive;
 
     abstract class PropertyView<T> : GeneralRecyclerListViewItem where T : View, FormField.IControl, new()
     {
@@ -12,7 +12,7 @@
 
         protected T Control = new T();
         TextView Label = new TextView().Font(12, color: "#888").Padding(3).Width(45.Percent()).Wrap(false);
-       // TextView Notes = new TextView("?").Background("#333").Size(15).TextAlignment(Alignment.Middle).Margin(left: 3, top: 2).Round();
+        // TextView Notes = new TextView("?").Background("#333").Size(15).TextAlignment(Alignment.Middle).Margin(left: 3, top: 2).Round();
         TextView TrackerIcon = new TextView("⌕").Font(16, color: Colors.Pink).Size(16).Margin(left: 2)
                                  .TextAlignment(Alignment.Middle).Round();
 
@@ -26,7 +26,7 @@
             await Content.Add(TrackerIcon.On(x => x.Tapped, () => TrackerIconTapped()));
             await Content.Add(Label);
             await Content.Add(Control);
-           // await Content.Add(Notes.On(x => x.Tapped, () => NotesTapped()));
+            // await Content.Add(Notes.On(x => x.Tapped, () => NotesTapped()));
         }
 
         protected virtual void Load()

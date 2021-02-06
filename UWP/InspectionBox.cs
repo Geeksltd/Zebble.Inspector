@@ -1,9 +1,9 @@
 namespace Zebble.UWP
 {
+    using Olive;
     using Services;
     using System.Collections.Generic;
     using System.Threading.Tasks;
-    using Olive;
 
     partial class InspectionBox : Stack
     {
@@ -47,7 +47,8 @@ namespace Zebble.UWP
             TreeScroller = await Row.Add(new ScrollView().Id("TreeScroller").Width(60.Percent())
                 .Background(color: "#333"));
 
-            new[] { TreeScroller, PropertiesScroller }.Do(x =>
+            new[] { TreeScroller, PropertiesScroller }
+                .Do(x =>
             {
                 x.ShowHorizontalScrollBars = x.ShowVerticalScrollBars = true;
                 x.Padding(10).Height(100.Percent());
@@ -62,8 +63,8 @@ namespace Zebble.UWP
                 PageTabs[1]?.Margin(left: 320);
 
             CloseButton?.X(570);
-            PageTabs.ForEach(view => { view.Visible = true; });
-            DeviceTabs.ForEach(view => { view.Visible = false; });
+            PageTabs.ForEach(view => view.Visible = true);
+            DeviceTabs.ForEach(view => view.Visible = false);
 
             PageButton?.Background(color: DeviceScroller == null ? SELECTED : "#444");
             DeviceButton?.Background(color: DeviceScroller != null ? SELECTED : "#444");
@@ -94,10 +95,12 @@ namespace Zebble.UWP
                 PageTabs[1]?.Margin(left: 0);
 
             CloseButton?.X(570);
-            DeviceTabs.ForEach(view => { view.Visible = true; });
-            PageTabs.ForEach(view => { view.Visible = false; });
+            DeviceTabs.ForEach(view => view.Visible = true);
+            PageTabs.ForEach(view => view.Visible = false);
 
-            DevicePanel.HeaderButtons.AddRange(new List<View> { DeviceTabs[DeviceTabs.Count - 1], DeviceTabs[DeviceTabs.Count - 2], DeviceTabs[DeviceTabs.Count - 3] });
+            DevicePanel.HeaderButtons
+                .AddRange(new List<View> { DeviceTabs[DeviceTabs.Count - 1], DeviceTabs[DeviceTabs.Count - 2], DeviceTabs[DeviceTabs.Count - 3] });
+
             await DevicePanel.Activate();
 
             PageButton?.Background(color: DeviceScroller == null ? SELECTED : "#444");
@@ -125,6 +128,7 @@ namespace Zebble.UWP
             });
 
             var geoLocationButton = CreateButton("Earth.png").Id("Earth").Background(color: "#444");
+
             geoLocationButton.On(x => x.Tapped, () =>
             {
                 DevicePanel?.CreateGeoLocationForm(WIDTH - 300, 1);
@@ -149,7 +153,7 @@ namespace Zebble.UWP
 
             CloseButton.X(570);
 
-            DeviceTabs.ForEach(view => { view.Visible = false; });
+            DeviceTabs.ForEach(view => view.Visible = false);
         }
 
         View CreateShakeButton()
@@ -202,7 +206,8 @@ namespace Zebble.UWP
                 .Background(color: platform.Platform == DevicePlatform.Windows ? SELECTED : "#666")
                 .Height(100.Percent()));
 
-                button.Tapped.Handle(async () =>
+                button.Tapped
+                    .Handle(async () =>
                 {
                     result.AllChildren.Except(button).Do(x => x.Background("#666"));
                     button.Background(SELECTED);

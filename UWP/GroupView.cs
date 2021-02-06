@@ -1,5 +1,5 @@
-﻿using System.Threading.Tasks;
-using Olive;
+﻿using Olive;
+using System.Threading.Tasks;
 
 namespace Zebble.UWP
 {
@@ -7,10 +7,7 @@ namespace Zebble.UWP
     {
         TextView TextView = new TextView().Font(18).Margin(vertical: 10);
 
-        public GroupView()
-        {
-            Item.Changed += () => TextView.Text = Item.Value.ToStringOrEmpty();
-        }
+        public GroupView() => Item.Changed += () => TextView.Text = Item.Value.ToStringOrEmpty();
 
         public override async Task OnInitializing()
         {

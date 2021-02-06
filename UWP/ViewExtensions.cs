@@ -1,8 +1,8 @@
 ﻿namespace Zebble.UWP
 {
+    using Olive;
     using System.Collections.Generic;
     using System.Linq;
-    using Olive;
 
     public static class ViewExtensions
     {
@@ -23,12 +23,14 @@
             };
 
             var parent = view.parent;
+
             while (parent != null && parent != View.Root)
             {
                 var viewType = view.GetType();
                 var children = parent.CurrentChildren.ToArray();
 
                 var childrenWithSameType = children.Where(x => x.GetType() == viewType);
+
                 if (childrenWithSameType.Skip(count: 1).Any())
                     array[array.Count - 1] += $":nth-child({parent.CurrentChildren.IndexOf(view)})";
 

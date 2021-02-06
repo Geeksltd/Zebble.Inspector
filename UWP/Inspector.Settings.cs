@@ -1,11 +1,11 @@
 ﻿namespace Zebble.UWP
 {
+    using Olive;
     using System;
     using System.Collections;
     using System.Collections.Generic;
     using System.Linq;
     using System.Reflection;
-    using Olive;
 
     partial class Inspector
     {
@@ -79,6 +79,7 @@
 
             var length = lengthOwner.GetType().GetField(name).GetValue(lengthOwner) as Length;
             var property = typeof(Length).GetProperty(nameof(Length.AsText));
+
             return new PropertySettings(length, property, view, group, type.ToString())
             {
                 Label = name,

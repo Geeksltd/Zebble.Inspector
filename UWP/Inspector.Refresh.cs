@@ -1,9 +1,9 @@
 ﻿namespace Zebble.UWP
 {
-    using System;
-    using System.Threading.Tasks;
-    using System.Linq;
     using Olive;
+    using System;
+    using System.Linq;
+    using System.Threading.Tasks;
 
     partial class Inspector
     {
