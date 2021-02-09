@@ -26,7 +26,7 @@
         {
             View = view;
 
-            CurrentCss = CurrentCss = view.CurrentlyAppliedCss;
+            CurrentCss = view.CurrentlyAppliedCss;
 
             if (!CssStak.AllChildren.None())
                 await CssStak.ClearChildren();
