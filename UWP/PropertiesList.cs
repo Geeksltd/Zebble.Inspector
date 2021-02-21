@@ -2,6 +2,7 @@
 {
     using Olive;
     using System;
+    using System.IO;
     using System.Linq;
     using System.Net.Http;
     using System.Threading.Tasks;
@@ -89,11 +90,21 @@
 
             await Add(AttributeFilter);
         }
+        string GetCssFileFromText(string text) => text.Remove("🗋 ");
+        async Task CreateVsIconAndText(string text)
+        {
+            var stack = new Stack(RepeatDirection.Horizontal);
+            var firsLine = text.ToLines().FirstOrDefault();
 
+            var cssStyle = text.ToLines().FirstOrDefault();
+            await stack.Add(new TextView(GetCssFileFromText(cssStyle).Remove("Styles/")).Font(11).TextColor("#fff").Padding(left: 5).Margin(bottom: 5));
+            await stack.Add(CreateVsIcon(text));
+            await CssStak.Add(stack);
+        }
         ImageView CreateVsIcon(string text)
         {
             var img = GetType().Assembly.ReadEmbeddedResource("Zebble", "Resources.VS.png");
-            var vsIcon = new ImageView().Id("VsButton").Size(15, 15).Alignment(Alignment.Right).Margin(left: 200, bottom: 5);
+            var vsIcon = new ImageView().Id("VsButton").Size(15, 15).Alignment(Alignment.Right).Margin(bottom: 5);
             vsIcon.BackgroundImageData = img;
 
             vsIcon.Tapped
@@ -104,25 +115,32 @@
                 if (cssStyle.IsEmpty() || cssStyle.Remove("🗋 ").IsEmpty())
                     return;
 
-                await LoadInVisualStudio(cssStyle.Remove("🗋 "));
+                await LoadInVisualStudio(GetSCSSFileLocation(cssStyle));
             });
 
             return vsIcon;
         }
+        string GetSCSSFileLocation(string text)
+        {
+            text = text.Remove("🗋 ");
+            text = text.Substring(0, text.IndexOf(".scss:") + 5);
+            return System.IO.Path.Combine(Helper.GetAppUIPath(), text);
+        }
 
         async Task LoadInVisualStudio(string cssSource)
         {
-            using (var httpClient = new HttpClient())
-            {
-                try
-                {
-                    var response = await httpClient.GetStringAsync(new Uri($"http://localhost:19765/Zebble/css/?open={cssSource}"));
-                }
-                catch (Exception ex)
-                {
-                    var error = "Error: " + ex.HResult.ToString("X") + " Message: " + ex.Message;
-                }
-            }
+            await Helper.LoadInVisualStudio(cssSource);
+            //using (var httpClient = new HttpClient())
+            //{
+            //    try
+            //    {
+            //        var response = await httpClient.GetStringAsync(new Uri($"http://localhost:19778/Zebble/VSIX/?type={cssSource}"));
+            //    }
+            //    catch (Exception ex)
+            //    {
+            //        var error = "Error: " + ex.HResult.ToString("X") + " Message: " + ex.Message;
+            //    }
+            //}
         }
 
         async Task AddCssTextBox(string css)
@@ -141,7 +159,8 @@
                     css = to == -1 ? css : css.Substring(to);
 
                     if (cssFile != "🗋 ")
-                        await CssStak.Add(CreateVsIcon(text));
+                        await CreateVsIconAndText(text);
+                    //await CssStak.Add(CreateVsIcon(text));
 
                     await CssStak.Add(new TextView()
                     {

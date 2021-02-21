@@ -32,6 +32,13 @@
                 }
 
                 await LoadEnsured(view);
+                if (view.GetType().FullName == view.Page.GetType().FullName)
+                {
+                    var appUiFolder = Helper.GetAppUIPath();
+                    var sourceCodeAttr = Helper.GetSourCodeAttrbiut(view.GetType());
+
+                    await Helper.LoadInVisualStudio(System.IO.Path.Combine(appUiFolder, sourceCodeAttr));
+                }
             }
             catch (Exception ex)
             {
