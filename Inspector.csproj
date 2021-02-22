@@ -5,7 +5,7 @@
     <RootNamespace>Zebble</RootNamespace>
     <PackageId>Zebble.Inspector</PackageId>
     <Product>$(AssemblyName) ($(TargetFramework))</Product>
-    <Version>2.7.158.0</Version>
+    <Version>2.7.161.0</Version>
     <PackOnBuild>true</PackOnBuild>
     <NeutralLanguage>en</NeutralLanguage>
     <DefineConstants>$(DefineConstants)</DefineConstants>
@@ -75,4 +75,7 @@
     <Folder Include="Android\" />
     <Folder Include="iOS\" />
   </ItemGroup>
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="update-local-nuget-cache" />
+  </Target>
 </Project>

@@ -33,7 +33,7 @@
 
                 await LoadEnsured(view);
 
-                if (view.GetType().FullName == view.Page.GetType().FullName)
+                if (view.GetType().FullName == view.Page?.GetType().FullName)
                 {
                     var appUiFolder = Helper.GetAppUIPath();
                     var sourceCodeAttr = Helper.GetSourCodeAttrbiut(view.GetType());
@@ -76,8 +76,7 @@
             var source = new TaskCompletionSource<bool>();
             var done = false;
 
-            Thread.UI
-                .Post(async () =>
+            Thread.UI.Post(async () =>
             {
                 var appView = ApplicationView.GetForCurrentView();
                 var newSize = new Size((float)width, (float)appView.VisibleBounds.Height);

@@ -13,7 +13,7 @@
         View View;
         Stack CssStak = new Stack(RepeatDirection.Vertical);
         string[] SearchKeywords;
-        TextInput CssTextbox = new TextInput { Lines = 3 }.Background(color: "#333").Padding(5).Font(11, color: "#7da").Border(0);
+
         TextView TypeInfo = new TextView().TextColor("#888").Background("#333").Padding(5).Margin(bottom: 5);
         TextInput AttributeFilter = new TextInput { Placeholder = "Search..." };
 
@@ -30,9 +30,8 @@
             if (!CssStak.AllChildren.None())
                 await CssStak.ClearChildren();
 
-            await AddCssTextBox(CurrentCss);
-            CssTextbox.Text = CurrentCss;
-            CssTextbox.Height.Update();
+            foreach (var css in CurrentCss.Split("🗋").Trim())
+                await AddCssTextBox(css);
 
             TypeInfo.Text = "Type ➝ " + view.GetType().WithAllParents()
               .TakeWhile(x => x != typeof(View))
@@ -46,7 +45,7 @@
 
         public async Task Reset()
         {
-            CssTextbox.Text = TypeInfo.Text = "";
+            TypeInfo.Text = "";
             CurrentSettings = new Inspector.PropertySettings[0];
             await EnsureProperties();
         }
@@ -67,14 +66,7 @@
             await Add(TypeInfo);
             await AddCss();
             await AddAttributeFilter();
-            // await Add(PropertiesContainer);
             await Add(Properties);
-
-            Thread.UI
-                .RunAction(() =>
-           (CssTextbox.Native() as Windows.UI.Xaml.Controls.Border)
-               .Get(x => x?.Child as Windows.UI.Xaml.Controls.TextBox)
-               .Perform(x => x.IsReadOnly = true));
         }
 
         async Task AddAttributeFilter()
@@ -89,88 +81,46 @@
             await Add(AttributeFilter);
         }
 
-        string GetCssFileFromText(string text) => text.Remove("🗋 ");
-
-        async Task CreateVsIconAndText(string text)
+        async Task CreateVsIconAndText(string file)
         {
-            var stack = new Stack(RepeatDirection.Horizontal);
-            var firsLine = text.ToLines().FirstOrDefault();
+            var path = file.TrimStart("Styles/", caseSensitive: false).Reverse().ToString("").Summarize(30).Reverse().ToString("");
 
-            var cssStyle = text.ToLines().FirstOrDefault();
-            await stack.Add(new TextView(GetCssFileFromText(cssStyle).Remove("Styles/")).Font(11).TextColor("#fff").Padding(left: 5).Margin(bottom: 5));
-            await stack.Add(CreateVsIcon(text));
+            var stack = new Stack(RepeatDirection.Horizontal);
+            await stack.Add(new TextView().Text(path).Font(11.5f).TextColor("#bbb").Margin(bottom: 5));
+            await stack.Add(CreateVsIcon(file));
             await CssStak.Add(stack);
         }
 
-        ImageView CreateVsIcon(string text)
+        ImageView CreateVsIcon(string file)
         {
             var img = GetType().Assembly.ReadEmbeddedResource("Zebble", "Resources.VS.png");
-            var vsIcon = new ImageView().Id("VsButton").Size(15, 15).Alignment(Alignment.Right).Margin(bottom: 5);
+            var vsIcon = new ImageView().Id("VsButton").Size(15).Alignment(Alignment.Right).Margin(bottom: 5);
             vsIcon.BackgroundImageData = img;
-
-            vsIcon.Tapped
-                .Handle(async () =>
-            {
-                var cssStyle = text.ToLines().FirstOrDefault();
-
-                if (cssStyle.IsEmpty() || cssStyle.Remove("🗋 ").IsEmpty()) return;
-
-                await LoadInVisualStudio(GetSCSSFileLocation(cssStyle));
-            });
-
+            vsIcon.Tapped.Handle(() => LoadInVisualStudio(GetSCSSFileLocation(file)));
             return vsIcon;
         }
 
-        string GetSCSSFileLocation(string text)
+        string GetSCSSFileLocation(string file)
         {
-            text = text.Remove("🗋 ");
-            text = text.Substring(0, text.IndexOf(".scss:") + 5);
-            return System.IO.Path.Combine(Helper.GetAppUIPath(), text);
+            return System.IO.Path.Combine(Helper.GetAppUIPath(), file.RemoveFrom(":").Replace("/", "\\"));
         }
 
         async Task LoadInVisualStudio(string cssSource)
         {
             await Helper.LoadInVisualStudio(cssSource);
-            // using (var httpClient = new HttpClient())
-            // {
-            //    try
-            //    {
-            //        var response = await httpClient.GetStringAsync(new Uri($"http://localhost:19778/Zebble/VSIX/?type={cssSource}"));
-            //    }
-            //    catch (Exception ex)
-            //    {
-            //        var error = "Error: " + ex.HResult.ToString("X") + " Message: " + ex.Message;
-            //    }
-            // }
         }
 
         async Task AddCssTextBox(string css)
         {
             try
             {
-                if (css.IsEmpty()) return;
+                var lines = css.ToLines();
+                if (!lines.HasMany()) return;
 
-                if (css.StartsWith("🗋 "))
-                {
-                    var cssFile = css.ToLines().First();
-                    css = css.Substring(cssFile.Length);
-                    var to = css.IndexOf("🗋 ");
-                    var text = cssFile + (to == -1 ? css : css.Substring(0, to));
-                    css = to == -1 ? css : css.Substring(to);
+                await CreateVsIconAndText(lines[0]);
 
-                    if (cssFile != "🗋 ")
-                        await CreateVsIconAndText(text);
-                    // await CssStak.Add(CreateVsIcon(text));
-
-                    await CssStak.Add(new TextView()
-                    {
-                        Text = text.Remove("\r\n\r\n"),
-                    }.Background(color: "#333").Padding(5).Font(11, color: "#7da").Border(0).Margin(bottom: 10));
-
-                    if (to == -1) css = "";
-
-                    await AddCssTextBox(css);
-                }
+                css = css.Remove(lines[0]).Trim();
+                await CssStak.Add(new TextView(css).Background(color: "#333").Padding(5).Font(11.5f, color: "#fda").Border(0).Margin(bottom: 10).Set(x => x.Height.MinLimit = 40));
             }
             catch (Exception ex)
             {
@@ -180,22 +130,8 @@
 
         async Task AddCss()
         {
-            var css = new Stack(RepeatDirection.Horizontal);
-            await Add(css);
-            await css.Add(new TextView("CSS").ChangeInBatch(x => x.Font(20).Margin(vertical: 10)));
-            // await css.Add(CreateVsIcon());
-
+            await Add(new TextView("CSS").ChangeInBatch(x => x.Font(20).Margin(vertical: 10)));
             await Add(CssStak);
-            // await Add(CssTextbox);
-
-            CssTextbox.Height
-                .BindTo(CssTextbox.Padding.Top, CssTextbox.Padding.Bottom,
-                (pt, pb) => (CalculateCssContentHeight() + pt + pb).LimitMax(500));
-        }
-
-        float CalculateCssContentHeight()
-        {
-            return CssTextbox.Font.GetTextHeight(CssTextbox.ActualWidth, CurrentCss) * 1.05f;
         }
 
         Task EnsureProperties()
