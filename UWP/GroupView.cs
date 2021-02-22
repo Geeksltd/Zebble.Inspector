@@ -1,5 +1,5 @@
-﻿using Olive;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
+using Olive;
 
 namespace Zebble.UWP
 {

@@ -12,6 +12,7 @@
         {
             return Directory.GetParent(Environment.CurrentDirectory).GetAppUIFolder();
         }
+
         public static string GetSourCodeAttrbiut(Type type)
         {
             try
@@ -20,13 +21,16 @@
             }
             catch (Exception ex)
             {
+                var error = "Error: " + ex.HResult.ToString("X") + " Message: " + ex.Message;
             }
-            return "";
 
+            return "";
         }
+
         public static async Task LoadInVisualStudio(string filePath)
         {
             using var httpClient = new HttpClient();
+
             try
             {
                 var response = await httpClient.GetStringAsync(new Uri($"http://localhost:19778/Zebble/VSIX/?type={filePath}"));

@@ -1,9 +1,9 @@
 namespace Zebble.UWP
 {
-    using Olive;
-    using Services;
     using System.Collections.Generic;
     using System.Threading.Tasks;
+    using Olive;
+    using Services;
 
     partial class InspectionBox : Stack
     {

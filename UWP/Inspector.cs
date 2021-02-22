@@ -1,8 +1,8 @@
 ﻿namespace Zebble.UWP
 {
-    using Olive;
     using System;
     using System.Threading.Tasks;
+    using Olive;
     using Windows.UI.ViewManagement;
 
     public partial class Inspector : IInspector
@@ -32,6 +32,7 @@
                 }
 
                 await LoadEnsured(view);
+
                 if (view.GetType().FullName == view.Page.GetType().FullName)
                 {
                     var appUiFolder = Helper.GetAppUIPath();

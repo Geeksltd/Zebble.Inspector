@@ -1,9 +1,9 @@
 ﻿namespace Zebble.UWP
 {
-    using Olive;
     using System;
     using System.Linq;
     using System.Threading.Tasks;
+    using Olive;
     using Windows.Web.Http;
 
     partial class InspectionBox

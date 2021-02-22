@@ -1,8 +1,8 @@
 ﻿namespace Zebble.UWP
 {
-    using Olive;
     using System;
     using System.Threading.Tasks;
+    using Olive;
     using Zebble;
     using Zebble.Services;
 

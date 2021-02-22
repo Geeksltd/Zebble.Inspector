@@ -1,8 +1,8 @@
 ﻿namespace Zebble.UWP
 {
-    using Olive;
     using System.Collections.Generic;
     using System.Linq;
+    using Olive;
 
     public static class ViewExtensions
     {
