@@ -16,7 +16,7 @@
         TextInput CssTextbox = new TextInput { Lines = 3 }.Background(color: "#333").Padding(5).Font(11, color: "#7da").Border(0);
         TextView TypeInfo = new TextView().TextColor("#888").Background("#333").Padding(5).Margin(bottom: 5);
         TextInput AttributeFilter = new TextInput { Placeholder = "Search..." };
-
+        Button OpenInVSButton = null;
         PropertiesRecyclerList Properties = new PropertiesRecyclerList();
 
         internal AsyncEvent<bool> ScrollEnabledChange = new AsyncEvent<bool>();
@@ -42,6 +42,10 @@
             CurrentSettings = Inspector.GetSettings(View).ToArray();
 
             await EnsureProperties();
+
+            OpenInVSButton.Enabled =
+                Inspector.Current.CurrentView != null && Inspector.Current.CurrentView.Page.GetType().FullName == Inspector.Current.CurrentView.GetType().FullName;
+            UpdateOpenInVSButtonColor();
         }
 
         public async Task Reset()
@@ -64,6 +68,9 @@
             await buttons.Add(CreateDeleteButton());
             await buttons.Add(CreateBringToFrontButton());
             await buttons.Add(CreateSendToBackButton());
+
+            await buttons.Add(await CreateOpenInVSButton());
+
             await Add(TypeInfo);
             await AddCss();
             await AddAttributeFilter();
@@ -218,7 +225,7 @@
 
         Button CreateDeleteButton()
         {
-            var result = new Button { Text = "Delete" }.TextColor(Colors.Red).Margin(10).Padding(0).Height(null);
+            var result = new Button { Text = "Delete" }.TextColor(Colors.Red).Margin(5).Padding(0).Height(null);
 
             result.Tapped
                 .Handle(async () =>
@@ -233,16 +240,42 @@
 
         Button CreateBringToFrontButton()
         {
-            var result = new Button { Text = "↥ Front" }.TextColor(Colors.LightGreen).Margin(10).Padding(0);
+            var result = new Button { Text = "↥ Front" }.TextColor(Colors.LightGreen).Margin(5).Padding(0);
             result.Tapped.Handle(() => View.BringToFront());
             return result;
         }
 
         Button CreateSendToBackButton()
         {
-            var result = new Button { Text = "↧ Back" }.TextColor(Colors.LightBlue).Margin(10).Padding(0);
+            var result = new Button { Text = "↧ Back" }.TextColor(Colors.LightBlue).Margin(5).Padding(0);
             result.Tapped.Handle(() => View.SendToBack());
             return result;
+        }
+        async Task<Stack> CreateOpenInVSButton()
+        {
+            var result = new Stack(RepeatDirection.Horizontal);
+            OpenInVSButton = new Button { Text = "Open" }.TextColor(Colors.LightBlue).Margin(5).Padding(0);
+
+            result.Tapped.Handle(async () =>
+            {
+                if (!OpenInVSButton.Enabled) return;
+                var appUiFolder = Helper.GetAppUIPath();
+                var sourceCodeAttr = Helper.GetSourCodeAttrbiut(Inspector.Current.CurrentView.GetType());
+                await Helper.LoadInVisualStudio(System.IO.Path.Combine(appUiFolder, sourceCodeAttr));
+            });
+            OpenInVSButton.Enabled = false;
+
+            var img = GetType().Assembly.ReadEmbeddedResource("Zebble", "Resources.VS.png");
+            var vsIcon = new ImageView().Id("VsButton").Size(12, 12).Alignment(Alignment.Right).Margin(top: 5, left: 5);
+            vsIcon.BackgroundImageData = img;
+
+            await result.Add(vsIcon);
+            await result.Add(OpenInVSButton);
+            return result;
+        }
+        void UpdateOpenInVSButtonColor()
+        {
+            OpenInVSButton.TextColor = OpenInVSButton.Enabled ? Colors.LightBlue : Color.Parse("#3F4254");
         }
     }
 }

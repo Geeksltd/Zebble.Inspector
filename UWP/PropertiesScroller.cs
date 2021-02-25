@@ -8,7 +8,7 @@
 
         public PropertiesScroller()
         {
-            this.Width(40.Percent()).Background(color: "#222");
+            this.Width(50.Percent()).Background(color: "#222");
             PropertiesBox.ScrollEnabledChange.Handle(x => EnableScrolling = x);
         }
 

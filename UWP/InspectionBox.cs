@@ -44,7 +44,7 @@ namespace Zebble.UWP
                 DeviceScroller = null;
             }
 
-            TreeScroller = await Row.Add(new ScrollView().Id("TreeScroller").Width(60.Percent())
+            TreeScroller = await Row.Add(new ScrollView().Id("TreeScroller").Width(50.Percent())
                 .Background(color: "#333"));
 
             new[] { TreeScroller, PropertiesScroller }
