@@ -16,7 +16,7 @@
 
         TextView TypeInfo = new TextView().TextColor("#888").Background("#333").Padding(5).Margin(bottom: 5);
         TextInput AttributeFilter = new TextInput { Placeholder = "Search..." };
-        Button OpenInVSButton = null;
+        Button OpenInVSButton;
         PropertiesRecyclerList Properties = new PropertiesRecyclerList();
 
         internal AsyncEvent<bool> ScrollEnabledChange = new AsyncEvent<bool>();
@@ -44,6 +44,7 @@
 
             OpenInVSButton.Enabled =
                 Inspector.Current.CurrentView != null && Inspector.Current.CurrentView.Page.GetType().FullName == Inspector.Current.CurrentView.GetType().FullName;
+
             UpdateOpenInVSButtonColor();
         }
 
@@ -112,10 +113,7 @@
             return System.IO.Path.Combine(Helper.GetAppUIPath(), file.RemoveFrom(":").Replace("/", "\\"));
         }
 
-        async Task LoadInVisualStudio(string cssSource)
-        {
-            await Helper.LoadInVisualStudio(cssSource);
-        }
+        async Task LoadInVisualStudio(string cssSource) => await Helper.LoadInVisualStudio(cssSource);
 
         async Task AddCssTextBox(string css)
         {
@@ -187,18 +185,21 @@
             result.Tapped.Handle(() => View.SendToBack());
             return result;
         }
+
         async Task<Stack> CreateOpenInVSButton()
         {
             var result = new Stack(RepeatDirection.Horizontal);
             OpenInVSButton = new Button { Text = "Open" }.TextColor(Colors.LightBlue).Margin(5).Padding(0);
 
-            result.Tapped.Handle(async () =>
+            result.Tapped
+                .Handle(async () =>
             {
                 if (!OpenInVSButton.Enabled) return;
                 var appUiFolder = Helper.GetAppUIPath();
                 var sourceCodeAttr = Helper.GetSourCodeAttrbiut(Inspector.Current.CurrentView.GetType());
                 await Helper.LoadInVisualStudio(System.IO.Path.Combine(appUiFolder, sourceCodeAttr));
             });
+
             OpenInVSButton.Enabled = false;
 
             var img = GetType().Assembly.ReadEmbeddedResource("Zebble", "Resources.VS.png");
@@ -209,6 +210,7 @@
             await result.Add(OpenInVSButton);
             return result;
         }
+
         void UpdateOpenInVSButtonColor()
         {
             OpenInVSButton.TextColor = OpenInVSButton.Enabled ? Colors.LightBlue : Color.Parse("#3F4254");
