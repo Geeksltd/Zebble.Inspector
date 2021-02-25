@@ -5,9 +5,12 @@
     using System.Linq;
     using System.Net.Http;
     using System.Threading.Tasks;
+    using Olive;
 
     public static class Helper
     {
+        static HttpClient Http = new HttpClient();
+
         public static string GetAppUIPath()
         {
             return Directory.GetParent(Environment.CurrentDirectory).GetAppUIFolder();
@@ -29,16 +32,13 @@
 
         public static async Task LoadInVisualStudio(string filePath)
         {
-            using var httpClient = new HttpClient();
-
             try
             {
-                var response = await httpClient.GetStringAsync(new Uri($"http://localhost:19778/Zebble/VSIX/?type={filePath}"));
-                httpClient.Dispose();
+                await Http.GetStringAsync(new Uri($"http://localhost:19778/Zebble/VSIX/?type={filePath}"));
             }
             catch (Exception ex)
             {
-                var error = "Error: " + ex.HResult.ToString("X") + " Message: " + ex.Message;
+                Log.For<Inspector>().Error("Error: " + ex.HResult.ToString("X") + " Message: " + ex.Message);
             }
         }
     }

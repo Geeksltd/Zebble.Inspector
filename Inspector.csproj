@@ -1,12 +1,11 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project Sdk="MSBuild.Sdk.Extras/3.0.23">
+﻿<Project Sdk="MSBuild.Sdk.Extras/3.0.23">
   <PropertyGroup>
     <TargetFrameworks Condition=" '$(OS)' == 'Windows_NT' ">uap10.0.18362</TargetFrameworks>
     <AssemblyName>Zebble.Inspector</AssemblyName>
     <RootNamespace>Zebble</RootNamespace>
     <PackageId>Zebble.Inspector</PackageId>
     <Product>$(AssemblyName) ($(TargetFramework))</Product>
-    <Version>2.7.159</Version>
+    <Version>2.7.161.0</Version>
     <PackOnBuild>true</PackOnBuild>
     <NeutralLanguage>en</NeutralLanguage>
     <DefineConstants>$(DefineConstants)</DefineConstants>
@@ -61,13 +60,12 @@
     <EmbeddedResource Include="Resources\Warning.png" />
     <EmbeddedResource Include="Resources\Windows.png" />
   </ItemGroup>
-   <ItemGroup>
-      <None Remove=".gitignore" />
-      <None Remove="icon.png" />
-      <None Remove="README.md" />
-      <None Remove="Zebble-LicenseAgreement.txt" />
-    </ItemGroup>
-
+  <ItemGroup>
+    <None Remove=".gitignore" />
+    <None Remove="icon.png" />
+    <None Remove="README.md" />
+    <None Remove="Zebble-LicenseAgreement.txt" />
+  </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Zebble.CheckBox" Version="1.22.122" />
     <PackageReference Include="Zebble.ListView" Version="4.10.188" />
@@ -77,4 +75,7 @@
     <Folder Include="Android\" />
     <Folder Include="iOS\" />
   </ItemGroup>
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="update-local-nuget-cache" />
+  </Target>
 </Project>
