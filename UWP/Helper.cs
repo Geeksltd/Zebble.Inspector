@@ -1,6 +1,7 @@
 ﻿namespace Zebble.UWP
 {
     using System;
+    using System.Reflection;
     using System.IO;
     using System.Linq;
     using System.Net.Http;
@@ -20,7 +21,11 @@
         {
             try
             {
-                return $"{type.GetCustomAttributesData().FirstOrDefault(x => x.AttributeType.FullName == "Zebble.Services.Css.SourceCodeAttribute").ConstructorArguments[0].Value}";
+                type?.GetCustomAttributes<Services.Css.SourceCodeAttribute>()
+                    .OrEmpty()
+                    .Select(v => v.FilePath)
+                    .Trim()
+                    .FirstOrDefault();
             }
             catch (Exception ex)
             {
