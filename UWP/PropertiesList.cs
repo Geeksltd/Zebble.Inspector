@@ -42,8 +42,7 @@
 
             await EnsureProperties();
 
-            OpenInVSButton.Enabled =
-                Inspector.Current.CurrentView != null && Inspector.Current.CurrentView.Page.GetType().FullName == Inspector.Current.CurrentView.GetType().FullName;
+            OpenInVSButton.Enabled = Inspector.Current.CurrentView?.Page?.GetType() == Inspector.Current.CurrentView?.GetType();
 
             UpdateOpenInVSButtonColor();
         }
@@ -196,7 +195,7 @@
             {
                 if (!OpenInVSButton.Enabled) return;
                 var appUiFolder = Helper.GetAppUIPath();
-                var sourceCodeAttr = Helper.GetSourCodeAttrbiut(Inspector.Current.CurrentView.GetType());
+                var sourceCodeAttr = Helper.GetSourceCodeAttribute(Inspector.Current.CurrentView.GetType());
                 await Helper.LoadInVisualStudio(System.IO.Path.Combine(appUiFolder, sourceCodeAttr));
             });
 

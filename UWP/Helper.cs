@@ -10,18 +10,18 @@
 
     public static class Helper
     {
-        static HttpClient Http = new HttpClient();
+        static readonly HttpClient Http = new();
 
         public static string GetAppUIPath()
         {
             return Directory.GetParent(Environment.CurrentDirectory).GetAppUIFolder();
         }
 
-        public static string GetSourCodeAttrbiut(Type type)
+        public static string GetSourceCodeAttribute(Type type)
         {
             try
             {
-                type?.GetCustomAttributes<Services.Css.SourceCodeAttribute>()
+                return type?.GetCustomAttributes<Services.Css.SourceCodeAttribute>()
                     .OrEmpty()
                     .Select(v => v.FilePath)
                     .Trim()
@@ -29,7 +29,7 @@
             }
             catch (Exception ex)
             {
-                var error = "Error: " + ex.HResult.ToString("X") + " Message: " + ex.Message;
+                Log.For<Inspector>().Error("Error: " + ex.HResult.ToString("X") + " Message: " + ex.Message);
             }
 
             return "";
