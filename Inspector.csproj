@@ -67,8 +67,9 @@
     <None Remove="Zebble-LicenseAgreement.txt" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="Zebble" Version="4.5.631" />
     <PackageReference Include="Zebble.CheckBox" Version="1.22.126" />
-    <PackageReference Include="Zebble.ListView" Version="4.10.199" />
+    <PackageReference Include="Zebble.ListView" Version="4.10.217" />
     <PackageReference Include="Zebble.Location" Version="1.0.122" />
   </ItemGroup>
   <ItemGroup>
