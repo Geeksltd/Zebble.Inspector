@@ -5,7 +5,7 @@
     <RootNamespace>Zebble</RootNamespace>
     <PackageId>Zebble.Inspector</PackageId>
     <Product>$(AssemblyName) ($(TargetFramework))</Product>
-    <Version>2.7.165.0</Version>
+    <Version>2.7.167.0</Version>
     <PackOnBuild>true</PackOnBuild>
     <NeutralLanguage>en</NeutralLanguage>
     <DefineConstants>$(DefineConstants)</DefineConstants>
@@ -67,9 +67,9 @@
     <None Remove="Zebble-LicenseAgreement.txt" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Zebble" Version="4.5.673" />
+    <PackageReference Include="Zebble" Version="4.5.694" />
     <PackageReference Include="Zebble.CheckBox" Version="1.22.127" />
-    <PackageReference Include="Zebble.ListView" Version="4.10.220" />
+    <PackageReference Include="Zebble.ListView" Version="4.10.222" />
     <PackageReference Include="Zebble.Location" Version="1.0.123" />
   </ItemGroup>
   <ItemGroup>

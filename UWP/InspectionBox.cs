@@ -44,13 +44,13 @@ namespace Zebble.UWP
                 DeviceScroller = null;
             }
 
-            TreeScroller = await Row.Add(new ScrollView().Id("TreeScroller").Width(50.Percent())
+            TreeScroller = await Row.Add(new ScrollView { Direction = RepeatDirection.Horizontal }.Id("TreeScroller").Width(50.Percent())
                 .Background(color: "#333"));
 
             new[] { TreeScroller, PropertiesScroller }
                 .Do(x =>
             {
-                x.ShowHorizontalScrollBars = x.ShowVerticalScrollBars = true;
+                x.ShowHorizontalScrollBars = true;
                 x.Padding(10).Height(100.Percent());
                 x.ShowVerticalScrollBars = false;
             });

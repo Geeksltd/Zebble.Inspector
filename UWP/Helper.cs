@@ -16,23 +16,24 @@
         {
             return Directory.GetParent(Environment.CurrentDirectory).GetAppUIFolder();
         }
-
-        public static string GetSourceCodeAttribute(Type type)
+         
+        public static string GetSourceCodeAttribute(Type type) 
         {
             try
             {
                 return type?.GetCustomAttributes<Services.Css.SourceCodeAttribute>()
+ 
                     .OrEmpty()
                     .Select(v => v.FilePath)
                     .Trim()
-                    .FirstOrDefault();
+                    .FirstOrDefault(); 
             }
             catch (Exception ex)
             {
                 Log.For<Inspector>().Error("Error: " + ex.HResult.ToString("X") + " Message: " + ex.Message);
             }
 
-            return "";
+            return string.Empty;
         }
 
         public static async Task LoadInVisualStudio(string filePath)

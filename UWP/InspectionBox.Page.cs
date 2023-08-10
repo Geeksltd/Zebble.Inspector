@@ -16,6 +16,7 @@
             await TreeScroller.ClearChildren();
 
             Tree = await TreeScroller.Add(new TreeView());
+            Tree.Width(800);
 
             foreach (var item in Root.AllChildren)
                 await Tree.AddNode(new TreeView.Node(item)); // Recursively creates child nodes

@@ -2,6 +2,7 @@
 {
     using System;
     using System.Linq;
+    using System.Reflection;
     using System.Threading.Tasks;
     using Olive;
 
@@ -43,7 +44,6 @@
             await EnsureProperties();
 
             OpenInVSButton.Enabled = Inspector.Current.CurrentView?.Page?.GetType() == Inspector.Current.CurrentView?.GetType();
-
             UpdateOpenInVSButtonColor();
         }
 
