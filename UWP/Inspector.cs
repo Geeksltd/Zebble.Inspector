@@ -60,7 +60,7 @@
         internal async Task Resize()
         {
             await InspectionBox.IgnoredAsync(false);
-            await ResizeWindow(View.Root.ActualWidth + InspectionBox.WIDTH);
+            await ResizeWindow(View.Root.ActualWidth + InspectionBox.WIDTH + 1);
         }
 
         static Task ResizeWindow(double width)
