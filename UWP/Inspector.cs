@@ -16,14 +16,10 @@
 
         public bool IsRotating { get; set; }
 
-        public async Task Load(View view)
+        public async Task Load(View view = null)
         {
-            if (view == null) return;
-
             try
             {
-                if (view.GetAllParents().Lacks(View.Root)) return;
-
                 if (InspectionBox.Ignored)
                 {
                     CurrentViewPath = null;
@@ -42,9 +38,7 @@
 
         async Task LoadEnsured(View view)
         {
-            if (view == null) return;
-
-            CurrentViewPath = view.GetFullyQualifiedPath();
+            CurrentViewPath = view?.GetFullyQualifiedPath();
 
             await HighlightItem();
             await InspectionBox.SelectCurrentNode();
@@ -60,6 +54,7 @@
         internal async Task Resize()
         {
             await InspectionBox.IgnoredAsync(false);
+            // +1 makes sure the layout will be updated
             await ResizeWindow(View.Root.ActualWidth + InspectionBox.WIDTH + 1);
         }
 
@@ -68,8 +63,7 @@
             var source = new TaskCompletionSource<bool>();
             var done = false;
 
-            Thread.UI
-                .Post(async () =>
+            Thread.UI.Post(async () =>
             {
                 var appView = ApplicationView.GetForCurrentView();
                 var newSize = new Size((float)width, (float)appView.VisibleBounds.Height);
