@@ -5,7 +5,7 @@
     <RootNamespace>Zebble</RootNamespace>
     <PackageId>Zebble.Inspector</PackageId>
     <Product>$(AssemblyName) ($(TargetFramework))</Product>
-    <Version>2.7.170.0</Version>
+    <Version>2.7.171.0</Version>
     <PackOnBuild>true</PackOnBuild>
     <NeutralLanguage>en</NeutralLanguage>
     <DefineConstants>$(DefineConstants)</DefineConstants>
