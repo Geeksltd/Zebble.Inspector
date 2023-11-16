@@ -31,8 +31,7 @@
             }
             catch (Exception ex)
             {
-                await Alert.Show("Internal error occurred: " + ex.Message)
-                    .ConfigureAwait(continueOnCapturedContext: false);
+                await Dialogs.Current.Alert("Internal error occurred", ex.Message);
             }
         }
 
