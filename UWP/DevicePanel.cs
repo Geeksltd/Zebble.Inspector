@@ -7,8 +7,6 @@
 
     class DevicePanel : Stack
     {
-        const string SELECTED = "#43aaa9";
-
         View View;
         Canvas MainPhone;
         ImageView Phone;
@@ -65,7 +63,7 @@
 
         async Task OnShown()
         {
-            await Add(MainPhone = new Canvas().MiddleAlign().CenterAlign().On(x => x.Panning, p => OnPanning(p)));
+            await Add(MainPhone = new Canvas().Center().On(x => x.Panning, p => OnPanning(p)));
 
             await MainPhone.Add(Title);
             await MainPhone.Add(Description);
@@ -74,15 +72,7 @@
             await MainPhone.Add(GyroscopeInfo);
             await MainPhone.Add(CompassInfo);
 
-            await MainPhone.Add(CreatePhone("Device.png").MiddleAlign().CenterAlign());
-        }
-
-        View CreateButton(string name)
-        {
-            return new ImageView
-            {
-                ImageData = GetType().Assembly.ReadEmbeddedResource("Zebble", "Inspection/Resources/" + name)
-            }.Size(32).Padding(6);
+            await MainPhone.Add(CreatePhone("Device.png").Center());
         }
 
         ImageView CreatePhone(string name)
