@@ -1,11 +1,12 @@
 ﻿<Project Sdk="MSBuild.Sdk.Extras/3.0.44">
   <PropertyGroup>
     <TargetFrameworks Condition=" '$(OS)' == 'Windows_NT' ">uap10.0.18362</TargetFrameworks>
+    <TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net8.0-windows10.0.19041.0</TargetFrameworks>
     <AssemblyName>Zebble.Inspector</AssemblyName>
     <RootNamespace>Zebble</RootNamespace>
     <PackageId>Zebble.Inspector</PackageId>
     <Product>$(AssemblyName) ($(TargetFramework))</Product>
-    <Version>2.7.174.0</Version>
+    <Version>3.0.0.0</Version>
     <PackOnBuild>true</PackOnBuild>
     <NeutralLanguage>en</NeutralLanguage>
     <DefineConstants>$(DefineConstants)</DefineConstants>
@@ -23,7 +24,7 @@
     <PackageReleaseNotes>Minor fixes</PackageReleaseNotes>
     <Owners>Geeks Ltd</Owners>
     <Authors>Geeks Ltd</Authors>
-    <Copyright>Geeks Ltd 2023, All rights reserved.</Copyright>
+    <Copyright>Geeks Ltd 2024, All rights reserved.</Copyright>
     <DisableExtraReferences>true</DisableExtraReferences>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)'=='Debug' ">
@@ -40,25 +41,11 @@
   <ItemGroup>
     <Compile Include="Shared\**\*.cs" />
   </ItemGroup>
-  <ItemGroup Condition=" $(TargetFramework.StartsWith('uap10.0')) ">
+  <ItemGroup Condition=" $(DefineConstants.Contains('UWP')) ">
     <Compile Include="UWP\**\*.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Resources\Accelerometer.png" />
-    <EmbeddedResource Include="Resources\Android.png" />
-    <EmbeddedResource Include="Resources\Back.png" />
-    <EmbeddedResource Include="Resources\Compass.png" />
-    <EmbeddedResource Include="Resources\Device.png" />
-    <EmbeddedResource Include="Resources\Earth.png" />
-    <EmbeddedResource Include="Resources\Gyroscope.png" />
-    <EmbeddedResource Include="Resources\IOS.png" />
-    <EmbeddedResource Include="Resources\Page.png" />
-    <EmbeddedResource Include="Resources\Refresh.png" />
-    <EmbeddedResource Include="Resources\Rotation.png" />
-    <EmbeddedResource Include="Resources\Shake.png" />
-    <EmbeddedResource Include="Resources\VS.png" />
-    <EmbeddedResource Include="Resources\Warning.png" />
-    <EmbeddedResource Include="Resources\Windows.png" />
+    <EmbeddedResource Include="Resources\**\*.png" />
   </ItemGroup>
   <ItemGroup>
     <None Remove=".gitignore" />
@@ -67,14 +54,9 @@
     <None Remove="Zebble-LicenseAgreement.txt" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Zebble" Version="4.6.114" />
-    <PackageReference Include="Zebble.CheckBox" Version="1.22.127" />
-    <PackageReference Include="Zebble.ListView" Version="4.10.231" />
-    <PackageReference Include="Zebble.Location" Version="1.0.123" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Android\" />
-    <Folder Include="iOS\" />
+    <PackageReference Include="Zebble" Version="5.0.0" />
+    <PackageReference Include="Zebble.CheckBox" Version="2.0.0" />
+    <PackageReference Include="Zebble.ListView" Version="5.0.1" />
   </ItemGroup>
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
     <Exec Command="update-local-nuget-cache" />

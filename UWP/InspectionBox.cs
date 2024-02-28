@@ -127,21 +127,11 @@ namespace Zebble.UWP
                 await CreateDevicePicker()
             });
 
-            var geoLocationButton = CreateButton("Earth.png").Id("Earth").Background(color: "#444");
-
-            geoLocationButton.On(x => x.Tapped, () =>
-            {
-                DevicePanel?.CreateGeoLocationForm(WIDTH - 300, 1);
-                geoLocationButton.Background(color: DevicePanel?.GeoLocationForm == null ? "#444" : SELECTED);
-            });
-
             DeviceTabs.AddRange(new List<View> {
                 CreateButton("Back.png").On(x => x.Tapped, Nav.OnHardwareBack),
-                CreateShakeButton(),
                 CreateRotationButton(),
                 CreateMemoryWarningButton(),
-                new TextView().Width(8).Height(100.Percent()).Border(color:"#777", left:1),
-                geoLocationButton
+                new TextView().Width(8).Height(100.Percent()).Border(color:"#777", left:1)
             });
 
             await HeaderBar.AddRange(PageTabs);
@@ -154,12 +144,6 @@ namespace Zebble.UWP
             CloseButton.X(570);
 
             DeviceTabs.ForEach(view => view.Visible = false);
-        }
-
-        View CreateShakeButton()
-        {
-            return CreateButton("Shake.png")
-                  .On(x => x.Tapped, () => Device.Accelerometer.DeviceShaken.RaiseOn(Thread.Pool));
         }
 
         View CreateRotationButton()
