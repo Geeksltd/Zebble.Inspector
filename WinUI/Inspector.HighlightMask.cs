@@ -2,7 +2,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Olive;
 
-namespace Zebble.UWP
+namespace Zebble.WinUI
 {
     partial class Inspector
     {
