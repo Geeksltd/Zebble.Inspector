@@ -54,9 +54,9 @@
     <None Remove="Zebble-LicenseAgreement.txt" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Zebble" Version="5.0.63" />
+    <PackageReference Include="Zebble" Version="5.1.0" />
     <PackageReference Include="Zebble.CheckBox" Version="2.0.1" />
-    <PackageReference Include="Zebble.ListView" Version="5.0.2" />
+    <PackageReference Include="Zebble.ListView" Version="5.1.0" />
   </ItemGroup>
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
     <Exec Command="update-local-nuget-cache" />
