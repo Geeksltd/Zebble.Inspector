@@ -1,4 +1,4 @@
-namespace Zebble.UWP
+namespace Zebble.WinUI
 {
     using System.Collections.Generic;
     using System.Threading.Tasks;

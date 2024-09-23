@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Olive;
 
-namespace Zebble.UWP
+namespace Zebble.WinUI
 {
     public class GroupView : GeneralRecyclerListViewItem
     {
