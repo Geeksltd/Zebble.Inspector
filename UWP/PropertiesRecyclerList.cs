@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Olive;
 using Windows.System;
 
-namespace Zebble.WinUI
+namespace Zebble.UWP
 {
     class PropertiesRecyclerList : GeneralRecyclerListView
     {
