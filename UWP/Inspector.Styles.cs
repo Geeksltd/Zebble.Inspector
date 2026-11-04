@@ -1,4 +1,4 @@
-﻿namespace Zebble.WinUI
+﻿namespace Zebble.UWP
 {
     using Olive;
     using Services;

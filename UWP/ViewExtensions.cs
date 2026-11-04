@@ -1,4 +1,4 @@
-﻿namespace Zebble.WinUI
+﻿namespace Zebble.UWP
 {
     using System.Collections.Generic;
     using System.Linq;
